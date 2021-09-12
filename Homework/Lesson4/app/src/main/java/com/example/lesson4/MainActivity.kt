@@ -50,11 +50,10 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                if (checkEditableIsInArray(latinArr, s)) {      // прекрасно, работает
+                if (checkEditableIsInArray(latinArr, s))      // прекрасно, работает
                     textInputLayoutEn.error = null
-                } else {
+                else
                     textInputLayoutEn.error = "Field supports only Latin"
-                }
             }
         })
 
@@ -63,12 +62,10 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable) {
-                if (checkEditableIsInArray(cyrillicArr, s)) {      // прекрасно, работает
+                if (checkEditableIsInArray(cyrillicArr, s))
                     textInputLayoutRu.error = null
-                }
-                else {
+                else
                     textInputLayoutRu.error = "Field supports only Cyrillic"
-                }
             }
         })
 
