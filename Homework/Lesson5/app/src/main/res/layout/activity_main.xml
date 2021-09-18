@@ -21,15 +21,15 @@
                 android:gravity="center"
                 android:layout_height="match_parent">
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv0" />
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv1" />
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv2" />
         </TableRow>
@@ -39,15 +39,15 @@
                 android:gravity="center"
                 android:layout_height="match_parent">
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv3" />
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv4" />
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv5" />
         </TableRow>
@@ -57,15 +57,15 @@
                 android:gravity="center"
                 android:layout_height="match_parent">
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv6" />
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv7" />
 
-            <ImageButton
+            <ImageView
                     style="@style/Theme.Lesson5.ImageViews"
                     android:id="@+id/iv8" />
         </TableRow>
