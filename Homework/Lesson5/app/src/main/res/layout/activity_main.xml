@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:background="@drawable/main_background">
+
+    <TableLayout
+            android:layout_width="275dp"
+            android:layout_height="275dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/main_l">
+
+        <TableRow
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv0" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv1" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv2" />
+        </TableRow>
+
+        <TableRow
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv3" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv4" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv5" />
+        </TableRow>
+
+        <TableRow
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="match_parent">
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv6" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv7" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson5.ImageViews"
+                    android:id="@+id/iv8" />
+        </TableRow>
+
+    </TableLayout>
+
+    <View
+            android:layout_width="279dp"
+            android:layout_height="279dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/main_field_shape"
+            android:id="@+id/view"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
