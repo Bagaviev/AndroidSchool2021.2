@@ -11,10 +11,6 @@ import java.util.*
 
 class MainActivity() : AppCompatActivity() {
 
-//        Log.e("log:", "imageButtonHolder[1][1].id $i")
-//        Toast.makeText(this,"bla", Toast.LENGTH_SHORT).show()
-//        val i: Int? = imageButtonHolder[1][1]?.drawable?.level
-
     companion object {
         const val DOTS_TO_WIN: Int = 3
         const val MAX_MOVE_CNT: Int = 9
@@ -28,12 +24,17 @@ class MainActivity() : AppCompatActivity() {
         var MOVE_CNT: Int = 0
         var WIN_CNT: Int = 0
         var LOSE_CNT: Int = 0
-        var DRAW_CNT: Int = 0
+        var STAR_FILLER_CNT: Int = 0
+        var WINE_FILLER_CNT: Int = 0
     }
 
     private lateinit var buttonR: Button
-    private lateinit var textView: TextView
+    private lateinit var textViewMsg: TextView
+    private lateinit var textViewPlayerScore: TextView
+    private lateinit var textViewAiScore: TextView
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var imageViewPlayerWine: ImageView
+    private lateinit var imageViewAiWine: ImageView
 
     private val imageViewsRefs = arrayOf(R.id.iv0, R.id.iv1, R.id.iv2, R.id.iv3, R.id.iv4, R.id.iv5, R.id.iv6, R.id.iv7, R.id.iv8)
     private val imageViewsHolder = Array(3) { arrayOfNulls<ImageView>(3) }
@@ -43,7 +44,11 @@ class MainActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         buttonR = findViewById(R.id.buttonRestart)
-        textView = findViewById(R.id.textViewInfo)
+        textViewMsg = findViewById(R.id.textViewInfo)
+        textViewPlayerScore = findViewById(R.id.textViewPlayerScore)
+        textViewAiScore = findViewById(R.id.textViewAIScore)
+        imageViewPlayerWine = findViewById(R.id.imageViewPlayerWine)
+        imageViewAiWine = findViewById(R.id.imageViewAIWine)
         initMap()
     }
 
@@ -55,10 +60,12 @@ class MainActivity() : AppCompatActivity() {
     private fun restartGame() {
         for (i in imageViewsHolder.indices) {
             for (j in imageViewsHolder[i].indices) {
+                checkScoreWipe(WINE_FILLER_CNT)
+                checkScoreWipe(STAR_FILLER_CNT)
                 imageViewsHolder[i][j]?.setImageLevel(0)
                 imageViewsHolder[i][j]?.setBackgroundColor(Color.parseColor("#00E6F5EA"))
-                textView.text = ""
-                textView.setBackgroundResource(R.color.textinfo_empty_background)
+                textViewMsg.text = ""
+                textViewMsg.setBackgroundResource(R.color.textinfo_empty_background)
                 MOVE_CNT = 0
                 initMap()
             }
@@ -89,18 +96,17 @@ class MainActivity() : AppCompatActivity() {
     }
 
     private fun printMessage(str: String) {
-        if (str == WIN_MESSAGE) textView.setBackgroundColor(
+        if (str == WIN_MESSAGE) textViewMsg.setBackgroundColor(
             Color.parseColor("#63ff85")
-        ) else if (str == LOSE_MESSAGE) textView.setBackgroundColor(
+        ) else if (str == LOSE_MESSAGE) textViewMsg.setBackgroundColor(
             Color.parseColor("#ff7070")
-        ) else textView.setBackgroundColor(Color.parseColor("#c953c0"))
-        textView.text = str
+        ) else textViewMsg.setBackgroundColor(Color.parseColor("#c953c0"))
+        textViewMsg.text = str
     }
 
     private fun doPlayerMove(v: ImageView) {
         if (v?.drawable?.level == EMPTY_LEVEL) {
             initAudio(CLICK)
-            mediaPlayer.start()
 
             v?.drawable?.level = CROSS_LEVEL
             MOVE_CNT++
@@ -108,14 +114,32 @@ class MainActivity() : AppCompatActivity() {
             if (checkWin(CROSS_LEVEL)) {
                 freezeMap()
                 WIN_CNT++
-//                updateScore(WIN_MESSAGE)
+
+                WINE_FILLER_CNT += 3333
+
+                imageViewPlayerWine.setImageLevel(WINE_FILLER_CNT)
+                updateScore(WIN_MESSAGE)
+
                 initAudio(WIN_MESSAGE)
-                mediaPlayer.start()
+
                 printMessage(WIN_MESSAGE)
                 colorize(CROSS_LEVEL)
                 return
             }
             doAiMove()
+        }
+    }
+
+    private fun checkScoreWipe(value: Int) {
+        if (value >= 9999) {
+            WINE_FILLER_CNT = 0
+            STAR_FILLER_CNT = 0
+            WIN_CNT = 0
+            LOSE_CNT = 0
+            textViewPlayerScore.setText("0")
+            textViewAiScore.setText("0")
+            imageViewPlayerWine.setImageLevel(0)
+            imageViewAiWine.setImageLevel(0)
         }
     }
 
@@ -143,24 +167,30 @@ class MainActivity() : AppCompatActivity() {
         while (true) {
             if (MOVE_CNT >= MAX_MOVE_CNT) {
                 printMessage(DRAW_MESSAGE)
-                DRAW_CNT++
-//                updateScore(com.example.reclinetask.GameActivity.DRAW_MESSAGE)
                 initAudio(DRAW_MESSAGE)
-                mediaPlayer.start()
                 freezeMap()
                 return
             }
             x = random.nextInt(imageViewsHolder.size)
             y = random.nextInt(imageViewsHolder.size)
+
             if (imageViewsHolder[x][y]?.drawable?.level == EMPTY_LEVEL) {
+
                 imageViewsHolder[x][y]?.drawable?.level = CIRCLE_LEVEL
                 MOVE_CNT++
+
                 if (checkWin(CIRCLE_LEVEL)) {
                     freezeMap()
                     initAudio(LOSE_MESSAGE)
-                    mediaPlayer.start()
+
                     LOSE_CNT++
-//                    updateScore(com.example.reclinetask.GameActivity.LOSE_MESSAGE)
+
+                    STAR_FILLER_CNT += 3333
+
+                    imageViewAiWine.setImageLevel(STAR_FILLER_CNT)
+
+                    updateScore(LOSE_MESSAGE)
+
                     printMessage(LOSE_MESSAGE)
                     colorize(CIRCLE_LEVEL)
                 }
@@ -238,11 +268,19 @@ class MainActivity() : AppCompatActivity() {
     }
 
     private fun initAudio(type: String) {
+        mediaPlayer = when (type) {
+            DRAW_MESSAGE -> MediaPlayer.create(this, R.raw.draw)
+            WIN_MESSAGE -> MediaPlayer.create(this, R.raw.win)
+            LOSE_MESSAGE -> MediaPlayer.create(this, R.raw.lose)
+            else -> MediaPlayer.create(this, R.raw.click)
+        }
+        mediaPlayer.start()
+    }
+
+    private fun updateScore(type: String) {
         when (type) {
-            DRAW_MESSAGE -> mediaPlayer = MediaPlayer.create(this, R.raw.draw)
-            WIN_MESSAGE -> mediaPlayer = MediaPlayer.create(this, R.raw.win)
-            LOSE_MESSAGE -> mediaPlayer = MediaPlayer.create(this, R.raw.lose)
-            else -> mediaPlayer = MediaPlayer.create(this, R.raw.click)
+            WIN_MESSAGE -> textViewPlayerScore.text = WIN_CNT.toString()
+            LOSE_MESSAGE -> textViewAiScore.text = LOSE_CNT.toString()
         }
     }
 }

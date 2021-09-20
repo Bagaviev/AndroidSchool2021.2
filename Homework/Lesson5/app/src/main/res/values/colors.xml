@@ -11,4 +11,6 @@
     <color name="kaef_black_main">#171717</color>
     <color name="kaef_black">#373737</color>
     <color name="textinfo_empty_background">#00E6F5EA</color>
+    <color name="red_wine">#950000</color>
+    <color name="yellow_limonchela">#DFA239</color>
 </resources>

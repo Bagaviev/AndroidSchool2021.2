@@ -117,4 +117,52 @@
             android:background="#61FFFC99"
             android:gravity="center" />
 
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textViewInfo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.97"
+            app:layout_constraintVertical_bias="0.17000002">
+
+        <ImageView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:id="@+id/imageViewPlayerWine"
+                android:src="@drawable/player_wins" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textViewPlayerScore"
+                android:textSize="34sp" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textViewInfo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintVertical_bias="0.17000002">
+
+        <ImageView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:id="@+id/imageViewAIWine"
+                android:src="@drawable/ai_wins" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textViewAIScore"
+                android:textSize="34sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
