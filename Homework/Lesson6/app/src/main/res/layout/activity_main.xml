@@ -15,7 +15,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_bias="0.33999997" />
+            app:layout_constraintVertical_bias="0.33999997"
+            android:scrollbars="vertical"/>
 
     <Button
             android:text="Добавить корзину"
@@ -30,7 +31,7 @@
             android:textSize="10sp" />
 
     <Button
-            android:text="Очистить корзины"
+            android:text="Удалить корзины"
             android:layout_width="94dp"
             android:layout_height="54dp"
             android:id="@+id/buttonClearBaskets"

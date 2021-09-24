@@ -10,8 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 // в целом тут 2 кейса рассматривается - когда несколько типов клик методов для каждой view на recycler item
 // и несколько типов items со своими клик методами в одном recyclerView
 
-class MyAdapter(val listener: MainActivity.MyListener): RecyclerView.Adapter<MyViewHolder>() {
-    var items: List<Element> = emptyList()
+class MyAdapter(private val listener: MyListener): RecyclerView.Adapter<MyViewHolder>() {
+
+    companion object {
+        var COUNTER_STATE = 0
+        const val BASKET = 0
+        const val APPLE = 1
+        const val SUMMARY = 2
+    }
+
+    lateinit var items: ArrayList<Element>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return when (viewType) {
@@ -35,46 +43,65 @@ class MyAdapter(val listener: MainActivity.MyListener): RecyclerView.Adapter<MyV
         when (holder) {
             is BasketViewHolder -> {
                 val element = items[position] as ElementBasket
-//                holder.textView.text = element.text
                 holder.button.setOnClickListener {
-                    listener.onOurCustomClick(holder.textView.text.toString() + " добавлена")
+
+                    if (!isBasketFull(element)) {
+                        element.appleList.add(ElementApple(element))        // сохраняем ссылку на себя же, чтобы потом заюзать при удалении яблока - подчистить список по ссылке
+                        items.add(position + 1, ElementApple(element))
+
+                        listener.onOurCustomClick("Яблоко добавлено")
+                        updateList()
+                    } else
+                        listener.onOurCustomClick("Сообщение о вреде жадности")
                 }
             }
 
             is AppleViewHolder -> {
                 val element = items[position] as ElementApple
                 holder.button.setOnClickListener {
-                    listener.onOurCustomClick(holder.textView.text.toString() + " удалено")
+                    items.removeAt(position)
+                    element.root.appleList.remove(element)
+
+                    listener.onOurCustomClick("Яблоко удалено")
+                    updateList()
                 }
             }
 
             is SummaryViewHolder -> {
                 val element = items[position] as ElementSummary
-//                holder.textViewInfo.text = holder.textView.text.toString()
+                holder.textViewCnt.text = COUNTER_STATE.toString()
             }
         }
 
-    /*
-        holder.textView.text = items[position]
-        holder.button.setOnClickListener {
-            listener.onButtonCLick(holder.button.text.toString())   // // для клика по определенной view внутри item'a
-        }
+        /*
+            holder.textView.text = items[position]
+            holder.button.setOnClickListener {
+                listener.onButtonCLick(holder.button.text.toString())   // // для клика по определенной view внутри item'a
+            }
 
-        holder.setOnClickListenerCustom(listener)
-        holder.itemView.setOnClickListener{     // для клика по всей view, нам же нужно по кнопке внутри нее обработать
-            listener.onButtonCLick(items[position])
-        }
-    */
+            holder.setOnClickListenerCustom(listener)
+            holder.itemView.setOnClickListener{     // для клика по всей view, нам же нужно по кнопке внутри нее обработать
+                listener.onButtonCLick(items[position])
+            }
+        */
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    companion object {
-        const val BASKET = 0
-        const val APPLE = 1
-        const val SUMMARY = 2
+    private fun isBasketFull(elementBasket: ElementBasket): Boolean {
+        return elementBasket.appleList.size >= 3
+    }
+
+    private fun calculateCounter() {
+        COUNTER_STATE = items.filterIsInstance<ElementBasket>()      // тоже красиво конечно
+                             .sumOf{ it.appleList.size }             // и заработало как надо с первого раза, фантастика
+    }
+
+    fun updateList() {
+        calculateCounter()
+        notifyDataSetChanged()
     }
 }
 
