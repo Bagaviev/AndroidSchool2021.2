@@ -9,23 +9,18 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lesson7.MainActivity
-import com.example.lesson7.R
+import com.example.lesson7.*
 import com.example.lesson7.utils.Converter
+import java.util.ArrayList
 
-class StateAdapter() : RecyclerView.Adapter<StateAdapter.ViewHolder>() {
-
-    // on focus listener
-    // переместить элемент на первое место
-    // adapter? notify move
-
+class CalculateAdapter : RecyclerView.Adapter<CalculateAdapter.ViewHolder>() {
     val nums = charArrayOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.')
     var converter = Converter()
-    var valuesState = ArrayList(converter.initList(converter.availableQuantities[0]))
+    var valuesState: ArrayList<ConverterValue> = ArrayList(emptyList<ConverterValue>())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item, parent, false)
+            .inflate(R.layout.list_item_calculate, parent, false)
         return ViewHolder(view)
     }
 
@@ -41,12 +36,12 @@ class StateAdapter() : RecyclerView.Adapter<StateAdapter.ViewHolder>() {
 
             override fun afterTextChanged(s: Editable) {
                 if (s.isNotBlank() and checkEditableIsInArray(nums, s)) {
-                    MainActivity.indexFromEditText = holder.adapterPosition
-                    MainActivity.valueFromEditText = holder.editText.text.toString().toDouble()
+                    CalculateActivity.indexFromEditText = holder.adapterPosition
+                    CalculateActivity.valueFromEditText = holder.editText.text.toString().toDouble()
                 } else {
                     holder.editText.post { Toast.makeText(holder.editText.context, "Nan", Toast.LENGTH_SHORT).show() }
-                    MainActivity.indexFromEditText = 0
-                    MainActivity.valueFromEditText = 0.0
+                    CalculateActivity.indexFromEditText = 0
+                    CalculateActivity.valueFromEditText = 0.0
                 }
             }
         })
@@ -56,9 +51,10 @@ class StateAdapter() : RecyclerView.Adapter<StateAdapter.ViewHolder>() {
                 var swap = valuesState.removeAt(holder.adapterPosition)
                 valuesState.add(0, swap)
 
-                notifyItemMoved(holder.adapterPosition, 0)  // notifyDatasetChanged вылетал почемуто, а тут все завелось
-                MainActivity.indexFromEditText = 0
-//                Log.e("Logs", holder.adapterPosition.toString() + " edittext focus got")
+                notifyItemMoved(holder.adapterPosition, 0)       // notifyDatasetChanged вылетал почемуто, а тут все завелось
+                CalculateActivity.indexFromEditText = 0          // Log.e("Logs", holder.adapterPosition.toString() + " edittext focus got")
+
+                // TODO: 30.09.2021 2) смог сделать только через кнопку, автоматический расчет после textChanged уходил в focus loop
             }
         }
     }
