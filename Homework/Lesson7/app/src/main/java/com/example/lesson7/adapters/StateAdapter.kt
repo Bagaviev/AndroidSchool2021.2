@@ -1,4 +1,4 @@
-package com.example.lesson7
+package com.example.lesson7.adapters
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,8 +9,15 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lesson7.MainActivity
+import com.example.lesson7.R
+import com.example.lesson7.utils.Converter
 
 class StateAdapter() : RecyclerView.Adapter<StateAdapter.ViewHolder>() {
+
+    // on focus listener
+    // переместить элемент на первое место
+    // adapter? notify move
 
     val nums = charArrayOf('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.')
     var converter = Converter()
@@ -43,6 +50,17 @@ class StateAdapter() : RecyclerView.Adapter<StateAdapter.ViewHolder>() {
                 }
             }
         })
+
+        holder.editText.setOnFocusChangeListener { v, hasFocus ->
+            if (holder.adapterPosition >= 0) {
+                var swap = valuesState.removeAt(holder.adapterPosition)
+                valuesState.add(0, swap)
+
+                notifyItemMoved(holder.adapterPosition, 0)  // notifyDatasetChanged вылетал почемуто, а тут все завелось
+                MainActivity.indexFromEditText = 0
+//                Log.e("Logs", holder.adapterPosition.toString() + " edittext focus got")
+            }
+        }
     }
 
     fun checkEditableIsInArray(alphabet: CharArray, s: Editable): Boolean {

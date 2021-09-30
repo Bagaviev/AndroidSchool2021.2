@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lesson7.adapters.StateAdapter
 
 class MainActivity : AppCompatActivity() {
     lateinit var recyclerView1: RecyclerView
@@ -31,10 +32,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun calculate(index: Int) {
-        adapter.valuesState[index].value = valueFromEditText
-        var valuesStateUpd = adapter.converter.convert(adapter.valuesState, index)
+        if (index >= 0 ) {              // если честно хз почему adapterPosition может возвращать -1, но выяснять не охота
+            adapter.valuesState[index].value = valueFromEditText
+            var valuesStateUpd = adapter.converter.convert(adapter.valuesState, index)
 
-        adapter.valuesState = valuesStateUpd as ArrayList<ConverterValue>
-        adapter.notifyDataSetChanged()
+            adapter.valuesState = valuesStateUpd as ArrayList<ConverterValue>
+            adapter.notifyDataSetChanged()
+        }
     }
 }

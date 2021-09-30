@@ -1,4 +1,8 @@
-package com.example.lesson7
+package com.example.lesson7.utils
+
+import com.example.lesson7.ConverterUnit
+import com.example.lesson7.ConverterValue
+import com.example.lesson7.Quantity
 
 /**
  * @author Bulat Bagaviev
