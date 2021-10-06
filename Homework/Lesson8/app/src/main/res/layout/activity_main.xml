@@ -7,12 +7,27 @@
         tools:context=".MainActivity">
 
     <com.example.lesson8.Speedometer
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:id="@+id/speedometer"
+            android:layout_width="356dp"
+            android:layout_height="330dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
 
-            app:speed="20"
-            app:maxSpeed="200" />
+            app:speed="10"
+            app:maxSpeed="200"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.349"
+            app:layout_constraintHorizontal_bias="0.49" />
+
+    <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="268dp"
+            android:layout_height="60dp"
+            android:progress="20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/speedometer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
