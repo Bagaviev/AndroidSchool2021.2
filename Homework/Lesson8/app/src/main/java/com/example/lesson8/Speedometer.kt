@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import kotlin.coroutines.coroutineContext
+import kotlin.math.min
 
 /**
  * @author Bulat Bagaviev
@@ -21,6 +22,8 @@ class Speedometer(context: Context, attributeSet: AttributeSet?) : View(context,
     companion object {
         val SMALL_BORDER_MARGIN = 8f
         val ARROW_WIDTH = 2f
+        val STROKE_WIDTH = 8f
+
         val placehoderList = mutableListOf<String>()
         var currentSpeed: Int = 0
         var maxSpeed: Int = 0
@@ -42,11 +45,11 @@ class Speedometer(context: Context, attributeSet: AttributeSet?) : View(context,
 
     val speedTextPainter = Paint(Paint.ANTI_ALIAS_FLAG).apply { textSize = 35f }
 
-    val arrowPainter = Paint(Paint.ANTI_ALIAS_FLAG).apply { strokeWidth = 8f }
+    val arrowPainter = Paint(Paint.ANTI_ALIAS_FLAG).apply { strokeWidth = STROKE_WIDTH }
 
     val mainArcPainter = Paint(Paint.ANTI_ALIAS_FLAG).apply {    // удобно, подсказка параметров появляется при наборе в пустоту
         style = Paint.Style.STROKE
-        strokeWidth = 16f
+        strokeWidth = STROKE_WIDTH * 2
     }
 
     var smalArcPainter = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
@@ -119,5 +122,16 @@ class Speedometer(context: Context, attributeSet: AttributeSet?) : View(context,
             maxSpeedTmp -= maxSpeed / 4
             placehoderList[i] = maxSpeedTmp.toString()
         }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {      // 200dp x 200dp etalon
+// чето не адекватно отработало, потом разберемся
+//        val size = min(w, h) - STROKE_WIDTH
+//        mainArcRect.set(
+//            paddingLeft.toFloat(),
+//            paddingTop.toFloat(),
+//            size - paddingRight,
+//            size - paddingBottom
+//        )
     }
 }
