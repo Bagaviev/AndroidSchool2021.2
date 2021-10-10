@@ -33,7 +33,7 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
     override fun onDraw(canvas: Canvas?) {
         canvas?.apply {
 
-            drawPath(path, paint)
+            drawPath(path, paint)   // сначала и здесь when сделал, но напрасно, отрисовываем каждый раз все объекты
 
             for (i in boxesList) {
                 var left = Math.min(i.origin!!.x, i.current.x)
@@ -44,21 +44,6 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
                 drawRect(left, top, right, bottom, paint)
             }
         }
-
-        /*when (MainActivity.CURRENT_DRAWER) {
-            DrawerType.CURVE -> drawPath(path, paint)
-            DrawerType.BOX -> {
-                for (i in boxesList) {
-                    var left = Math.min(i.origin!!.x, i.current.x)
-                    var right = Math.max(i.origin!!.x, i.current.x)
-
-                    var top = Math.min(i.origin!!.y, i.current.y)
-                    var bottom = Math.max(i.origin!!.y, i.current.y)
-                    drawRect(left, top, right, bottom, paint)
-                }
-            }
-            else -> Unit
-        }*/
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
