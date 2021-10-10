@@ -8,8 +8,8 @@
         android:orientation="vertical">
 
     <com.example.lesson9.TouchView
-            android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_width="0dp"
+            android:layout_height="542dp"
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +23,22 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:id="@+id/buttonClear"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@+id/spinner"
+            app:layout_constraintHorizontal_bias="0.724"
+            app:layout_constraintTop_toTopOf="@+id/spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner" />
+
+    <Spinner
+            android:layout_width="182dp"
+            android:layout_height="50dp"
+            android:id="@+id/spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="44dp"
+            android:entries="@array/drawer_types"
             app:layout_constraintTop_toBottomOf="@+id/touchView"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.748" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

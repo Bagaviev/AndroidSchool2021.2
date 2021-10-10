@@ -1,55 +1,105 @@
 package com.example.lesson9
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.example.lesson9.utils.Box
+import com.example.lesson9.utils.DrawerType
 import java.lang.IllegalStateException
 
 /**
  * @author Bulat Bagaviev
  * @created 10.10.2021
  */
-class TouchView(context: Context, attributeSet: AttributeSet): View(context, attributeSet) {                  // еще раз закрепляем: тут мы получаем context в конструкторе нашей view на вход, далее передаем в конструктор родителя, тк без него он работать не может
+
+class TouchView(context: Context, attributeSet: AttributeSet): View(context, attributeSet) {    // еще раз закрепляем: тут мы получаем context в конструкторе нашей view на вход, далее передаем в конструктор родителя, тк без него он работать не может
+    lateinit var currentBox: Box
+    var boxesList = mutableListOf<Box>()
+
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.GREEN
         strokeWidth = 10f
-        style = Paint.Style.STROKE
+        style = when (MainActivity.CURRENT_DRAWER) {
+            DrawerType.CURVE, DrawerType.LINE -> Paint.Style.STROKE
+            else -> Paint.Style.FILL
+        }
     }
 
     val path = Path()
 
     override fun onDraw(canvas: Canvas?) {
         canvas?.apply {
+
             drawPath(path, paint)
+
+            for (i in boxesList) {
+                var left = Math.min(i.origin!!.x, i.current.x)
+                var right = Math.max(i.origin!!.x, i.current.x)
+
+                var top = Math.min(i.origin!!.y, i.current.y)
+                var bottom = Math.max(i.origin!!.y, i.current.y)
+                drawRect(left, top, right, bottom, paint)
+            }
         }
+
+        /*when (MainActivity.CURRENT_DRAWER) {
+            DrawerType.CURVE -> drawPath(path, paint)
+            DrawerType.BOX -> {
+                for (i in boxesList) {
+                    var left = Math.min(i.origin!!.x, i.current.x)
+                    var right = Math.max(i.origin!!.x, i.current.x)
+
+                    var top = Math.min(i.origin!!.y, i.current.y)
+                    var bottom = Math.max(i.origin!!.y, i.current.y)
+                    drawRect(left, top, right, bottom, paint)
+                }
+            }
+            else -> Unit
+        }*/
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         var action = event?.action ?: throw IllegalStateException("null event")
-        var x = event.x
-        var y = event.y
-
-        Log.d("Touch", "x = $x, y = $y")        // Log.d("Touch", "event = CANCEL")
+        var point = PointF(event.x, event.y)
 
         return when (action) {
             MotionEvent.ACTION_DOWN -> {
-                path.moveTo(x, y)
+                when (MainActivity.CURRENT_DRAWER) {
+                    DrawerType.CURVE -> path.moveTo(point.x, point.y)
+                    DrawerType.BOX -> {
+                        currentBox = Box(point)
+                        boxesList.add(currentBox)
+                    }
+                    else -> Unit    // todo допилить 3 тип
+                }
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                path.lineTo(x, y)
-                invalidate()
+                when (MainActivity.CURRENT_DRAWER) {
+                    DrawerType.CURVE -> {
+                        path.lineTo(point.x, point.y)
+                        invalidate()
+                    }
+                    DrawerType.BOX -> {
+                        if (currentBox != null) {
+                            currentBox.current = point!!
+                            invalidate()
+                        }
+                    }
+                    else -> Unit    // todo допилить 3 тип
+                }
                 true
             }
             else -> super.onTouchEvent(event)
         }
     }
 
-
+    fun clearAll() {
+        path.reset()
+        boxesList.clear()
+        invalidate()
+    }
 }
