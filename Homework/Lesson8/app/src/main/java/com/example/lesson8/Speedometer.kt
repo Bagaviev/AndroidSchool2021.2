@@ -92,14 +92,12 @@ class Speedometer(context: Context, attributeSet: AttributeSet?) : View(context,
             drawArc(mainArcRect, 180f, 180f, true, mainArcPainter)
             drawArc(mainArcRect, 180f / maxSpeed * currentSpeed + 180f, ARROW_WIDTH, true, arrowPainter)
             drawArc(smallArcRect, 180f, 180f, true, smalArcPainter)
-
             initText()
         }
     }
 
     private fun Canvas.initText() {     // extension
         setSpeedPlaceholders(currentSpeed, maxSpeed)
-
         drawText(placehoderList[0], 20f, 185f, additionalTextPainter)
         drawText(placehoderList[1], 70f, 90f, additionalTextPainter)
         drawText(placehoderList[2], 180f, 40f, additionalTextPainter)
