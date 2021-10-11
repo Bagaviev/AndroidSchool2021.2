@@ -3,11 +3,11 @@ package com.example.lesson9
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.example.lesson9.utils.Box
 import com.example.lesson9.utils.DrawerType
+import com.example.lesson9.utils.Line
 import java.lang.IllegalStateException
 
 /**
@@ -17,7 +17,12 @@ import java.lang.IllegalStateException
 
 class TouchView(context: Context, attributeSet: AttributeSet): View(context, attributeSet) {    // еще раз закрепляем: тут мы получаем context в конструкторе нашей view на вход, далее передаем в конструктор родителя, тк без него он работать не может
     lateinit var currentBox: Box
+    lateinit var currentLine: Line
+
     var boxesList = mutableListOf<Box>()
+    var linesList = mutableListOf<Line>()
+
+    val path = Path()
 
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.GREEN
@@ -28,12 +33,13 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
         }
     }
 
-    val path = Path()
-
     override fun onDraw(canvas: Canvas?) {
         canvas?.apply {
 
-            drawPath(path, paint)   // сначала и здесь when сделал, но напрасно, отрисовываем каждый раз все объекты
+            drawPath(
+                path,
+                paint
+            )   // сначала и здесь when сделал, но напрасно, отрисовываем каждый раз все объекты
 
             for (i in boxesList) {
                 var left = Math.min(i.origin!!.x, i.current.x)
@@ -42,6 +48,10 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
                 var top = Math.min(i.origin!!.y, i.current.y)
                 var bottom = Math.max(i.origin!!.y, i.current.y)
                 drawRect(left, top, right, bottom, paint)
+            }
+
+            for (i in linesList) {
+                drawLine(i.origin!!.x, i.origin!!.y, i.current.x, i.current.y, paint)
             }
         }
     }
@@ -58,7 +68,10 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
                         currentBox = Box(point)
                         boxesList.add(currentBox)
                     }
-                    else -> Unit    // todo допилить 3 тип
+                    else -> {
+                        currentLine = Line(point)
+                        linesList.add(currentLine)
+                    }
                 }
                 true
             }
@@ -74,7 +87,12 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
                             invalidate()
                         }
                     }
-                    else -> Unit    // todo допилить 3 тип
+                    DrawerType.LINE -> {
+                        if (currentLine != null) {
+                            currentLine.current = point!!
+                            invalidate()
+                        }
+                    }
                 }
                 true
             }
@@ -85,6 +103,7 @@ class TouchView(context: Context, attributeSet: AttributeSet): View(context, att
     fun clearAll() {
         path.reset()
         boxesList.clear()
+        linesList.clear()
         invalidate()
     }
 }
