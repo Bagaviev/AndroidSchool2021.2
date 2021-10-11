@@ -25,6 +25,5 @@
         <item name="android:layout_margin">7dp</item>
         <item name="android:src">@drawable/field_items</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
-
     </style>
 </resources>

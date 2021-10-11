@@ -7,6 +7,6 @@ import android.graphics.PointF
  * @created 11.10.2021
  */
 
-data class Line(val origin: PointF?) {
+data class Line(val origin: PointF?, var color: Int) {
     var current: PointF = PointF(0f, 0f)
 }

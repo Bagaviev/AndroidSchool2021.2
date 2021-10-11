@@ -18,6 +18,48 @@
             android:id="@+id/touchView"
             android:background="#FFF7F7" />
 
+    <TableLayout
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/main_l"
+            app:layout_constraintTop_toBottomOf="@+id/touchView"
+            android:layout_marginTop="24dp"
+            android:background="#F3FBFF">
+
+        <TableRow
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+
+            <ImageButton
+                    style="@style/Theme.Lesson9.ImageViews"
+                    android:background="#FF0008"
+                    android:id="@+id/iv0" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson9.ImageViews"
+                    android:id="@+id/iv1"
+                    android:background="#FF9900" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson9.ImageViews"
+                    android:id="@+id/iv2"
+                    android:background="#19FF00" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson9.ImageViews"
+                    android:id="@+id/iv3"
+                    android:background="#BD02FF" />
+
+            <ImageButton
+                    style="@style/Theme.Lesson9.ImageViews"
+                    android:id="@+id/iv4"
+                    android:background="#000000" />
+        </TableRow>
+    </TableLayout>
+
     <Button
             android:text="Clear"
             android:layout_width="100dp"
@@ -37,8 +79,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="44dp"
             android:entries="@array/drawer_types"
-            app:layout_constraintTop_toBottomOf="@+id/touchView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.748" />
+            app:layout_constraintTop_toBottomOf="@+id/main_l" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
