@@ -93,7 +93,7 @@ class MyAdapter(private val listener: MyListener): RecyclerView.Adapter<MyViewHo
         return elementBasket.appleList.size >= 3
     }
 
-    private fun calculateCounter() {
+    fun calculateCounter() {
         COUNTER_STATE = items.filterIsInstance<ElementBasket>()      // тоже красиво конечно
                              .sumOf{ it.appleList.size }             // и заработало как надо с первого раза, фантастика
     }

@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
                         adapter.notifyItemRemoved(positionTmp)
                         apple.root.appleList.remove(apple)
 
-                        adapter.updateList()
+                        adapter.calculateCounter()
+                        adapter.notifyItemChanged(adapter.items.size - 1)
                     }
                     else -> {
                         var basket: ElementBasket = adapter.items.removeAt(positionTmp) as ElementBasket
@@ -93,7 +94,9 @@ class MainActivity : AppCompatActivity() {
                         adapter.notifyItemRangeRemoved(positionTmp, basket.appleList.size)
 
                         basket.appleList.clear()
-                        adapter.updateList()
+
+                        adapter.calculateCounter()
+                        adapter.notifyItemChanged(adapter.items.size - 1)
                     }
                 }
             }
@@ -107,12 +110,4 @@ class MainActivity : AppCompatActivity() {
                 return true // true if moved, false otherwise
             }
         }
-
-    private fun deleteBucket() {
-
-    }
-
-    private fun deleteApple() {
-
-    }
 }
