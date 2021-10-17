@@ -89,7 +89,7 @@ class MyAdapter(private val listener: MyListener): RecyclerView.Adapter<MyViewHo
         return items.size
     }
 
-    private fun isBasketFull(elementBasket: ElementBasket): Boolean {
+    fun isBasketFull(elementBasket: ElementBasket): Boolean {
         return elementBasket.appleList.size >= 3
     }
 
