@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="third_fragment_id" type="id" />
+    <!--    вот тут уничтожил много времени и нервов - не должно быть значения, про name и id-->
+</resources>
