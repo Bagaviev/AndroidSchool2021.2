@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.example.lesson15.databinding.SampleFragmentBinding
 
@@ -22,11 +23,21 @@ class SampleFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.textViewCounter.text = "0"
+        binding.textViewCounter.text = arguments?.getInt(FRAGM_CNT).toString()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val FRAGM_CNT = "FRAGM_CNT"
+
+        fun newInstance(fragCnt: Int): SampleFragment {
+            return SampleFragment().apply {
+                arguments = bundleOf(FRAGM_CNT to fragCnt)
+            }
+        }
     }
 }

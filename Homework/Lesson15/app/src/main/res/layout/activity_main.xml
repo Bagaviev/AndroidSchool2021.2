@@ -35,7 +35,6 @@
             android:layout_width="0dp"
             android:layout_height="500dp"
             android:layout_weight="1"
-            android:name="com.example.lesson15.SampleFragment"
             android:id="@+id/fragmentContainerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +65,7 @@
 
         <RadioButton
                 android:text="add"
+                android:checked="true"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:id="@+id/radioButtonAdd" />
