@@ -40,7 +40,7 @@ class InitFragment: Fragment() {
     }
 
     fun getText(): String {         // классно придумал, классно реализовали для нас
-        return if (binding.editTextCnt.text.toString().isDigitsOnly()) binding.editTextCnt.text.toString()
+        return if (binding.editTextCnt.text.toString().isDigitsOnly() and binding.editTextCnt.text.toString().isNotEmpty()) binding.editTextCnt.text.toString()
                else "0"
     }
 }

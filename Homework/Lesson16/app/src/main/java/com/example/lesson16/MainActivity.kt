@@ -1,6 +1,8 @@
 package com.example.lesson16
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -15,6 +17,7 @@ import com.example.lesson16.fragments.TimerFragment
 
 class MainActivity : AppCompatActivity(), PublicApi {
     private lateinit var binding: ActivityMainBinding
+
     var initFragment: InitFragment? = null
     var timerFragment: TimerFragment? = null
 
