@@ -28,6 +28,7 @@ class OkHttpConnector: NetConnector {
         val response: Response = okHttpClient.newCall(request).execute()
         val result: String = response.body!!.string()
 
+        response.close()
         return DataConverter.convertFromJsonMoshi(result)
     }
 
@@ -48,6 +49,7 @@ class OkHttpConnector: NetConnector {
         val response: Response = okHttpClient.newCall(request).execute()
         val result: String = response.body!!.string()
 
+        response.close()
         return DataConverter.convertFromJsonMoshi(result)
     }
 

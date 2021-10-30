@@ -48,11 +48,14 @@ class HttpUrlConnector: NetConnector {
                         break
                     builder.append(line).append("\n")
                 }
+
+                reader.close()
             }
         } catch (e: Exception) {
             connection.disconnect()
             Log.e("TAG", "Exception: $e.toString()")
         }
+
         connection.disconnect()
         return DataConverter.convertFromJson(builder.toString())
     }
@@ -90,18 +93,22 @@ class HttpUrlConnector: NetConnector {
                 var reader = BufferedReader(InputStreamReader(connection.inputStream))
                 var line: String? = ""
 
-                while (line != null) {      // криво тк в котлине нельзя присваивать в условии while (...)
+                while (line != null) {      // криво тк в котлине нельзя присваивать в условии while (...), костыль №1
                     line = reader.readLine()
 
                     if (line == null)
                         break
                     builder.append(line).append("\n")
                 }
+
+                reader.close()
+                writer.close()
             }
         } catch (e: Exception) {
             connection.disconnect()
             Log.e("TAG", "Exception: $e.toString()")
         }
+
         connection.disconnect()
         return DataConverter.convertFromJson(builder.toString())
     }

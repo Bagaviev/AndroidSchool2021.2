@@ -49,7 +49,7 @@ class DataConverter {
             var jsonAdapter: JsonAdapter<User>? = null
             try {
                 var moshi = Moshi.Builder()
-                    .add(KotlinJsonAdapterFactory())
+                    .add(KotlinJsonAdapterFactory())        // костыль №2
                     .build()
 
                 jsonAdapter = moshi.adapter(User::class.java)
