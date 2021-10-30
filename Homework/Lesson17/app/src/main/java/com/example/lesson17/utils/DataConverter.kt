@@ -2,6 +2,9 @@ package com.example.lesson17.utils
 
 import android.util.Log
 import com.example.lesson17.pojo.User
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -28,7 +31,7 @@ class DataConverter {
             return user
         }
 
-        fun convertToJson(data: User): JSONObject? {
+        fun convertToJson(data: User): String? {
             var obj: JSONObject? = null
             try {
                 obj = JSONObject()
@@ -39,7 +42,30 @@ class DataConverter {
             } catch (e: JSONException) {
                 Log.e("TAG", "convertToJson: $e.toString()")
             }
-            return obj
+            return obj.toString()
+        }
+
+        fun convertFromJsonMoshi(data: String): User? {     // не работает нормально на котлине, пришлось ковыряться в gradle костылях
+            var jsonAdapter: JsonAdapter<User>? = null
+            try {
+                var moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+
+                jsonAdapter = moshi.adapter(User::class.java)
+            } catch (e: Exception) {
+                Log.e("TAG", "convertFromJsonMoshi: $e.toString()")
+            }
+            return jsonAdapter?.fromJson(data)
+        }
+
+        fun convertToJsonMoshi(data: User): String {
+            var moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+
+            var jsonAdapter = moshi.adapter(User::class.java)
+            return jsonAdapter.toJson(data)
         }
     }
 }

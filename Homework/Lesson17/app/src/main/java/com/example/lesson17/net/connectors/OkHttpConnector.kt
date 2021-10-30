@@ -28,13 +28,13 @@ class OkHttpConnector: NetConnector {
         val response: Response = okHttpClient.newCall(request).execute()
         val result: String = response.body!!.string()
 
-        return DataConverter.convertFromJson(result)
+        return DataConverter.convertFromJsonMoshi(result)
     }
 
     override fun doPost(): User? {
         var okHttpClient = OkHttpClient()
         val user = User(1, 1, "UPD", false)
-        val json: String = DataConverter.convertToJson(user).toString()
+        val json: String = DataConverter.convertToJsonMoshi(user)
 
         val body: RequestBody = json
             .toRequestBody("application/json".toMediaTypeOrNull())
@@ -47,7 +47,8 @@ class OkHttpConnector: NetConnector {
 
         val response: Response = okHttpClient.newCall(request).execute()
         val result: String = response.body!!.string()
-        return DataConverter.convertFromJson(result)
+
+        return DataConverter.convertFromJsonMoshi(result)
     }
 
     override fun toString(): String {
