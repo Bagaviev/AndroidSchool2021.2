@@ -1,6 +1,7 @@
 package com.example.lesson17.net.connectors
 
 import com.example.lesson17.net.NetConnector
+import com.example.lesson17.pojo.User
 
 /**
  * @author Bulat Bagaviev
@@ -8,12 +9,12 @@ import com.example.lesson17.net.NetConnector
  */
 
 class OkHttpConnector: NetConnector {
-    override fun doGet(): String {
-        return "stub"
+    override fun doGet(): User? {
+        return User(1,1,"1", true)
     }
 
-    override fun doPost(): String {
-        return "stub"
+    override fun doPost(): User? {
+        return User(1,1,"1", true)
     }
 
     override fun toString(): String {

@@ -48,17 +48,17 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    private fun doPost() {      // более красивый механизм тредирования не работал так как нужно.
+    private fun doGet() {       // просто выводим данные о юзере
         Thread {
-            var result = networkRepository.currentConnector.doPost()
-            runOnUiThread { textViewData.text = result }
-        }.start()
+            var user = networkRepository.currentConnector.doGet()
+            runOnUiThread { textViewData.text = user.toString() }
+        }.start()               // более красивый механизм тредирования не работал так как нужно.
     }
 
-    private fun doGet() {
+    private fun doPost() {      // обновляем запись о юзере, его описание и возвращаем новое
         Thread {
-            var result = networkRepository.currentConnector.doGet()
-            runOnUiThread { textViewData.text = result }
+            var user = networkRepository.currentConnector.doPost()
+            runOnUiThread { textViewData.text = user.toString() }
         }.start()
     }
 }
