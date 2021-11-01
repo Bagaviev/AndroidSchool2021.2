@@ -55,7 +55,8 @@ class MainActivity : AppCompatActivity() {
         }.start()               // более красивый механизм тредирования не работал так как нужно.
     }
 
-    private fun doPost() {      // обновляем запись о юзере, его описание и возвращаем новое
+    private fun doPost() {
+        // обновляем запись о юзере, его описание и возвращаем новое
         Thread {
             var user = networkRepository.currentConnector.doPost()
             runOnUiThread { textViewData.text = user.toString() }
