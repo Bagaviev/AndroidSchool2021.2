@@ -26,7 +26,7 @@ class NetworkOkHttpImpl (
     }
 
     override fun getWeather(): RequestMain {
-//        val format = Json(jsonSerializer) { ignoreUnknownKeys = true }
+        val format = Json(jsonSerializer) { ignoreUnknownKeys = true }      // костыль, но после переписывания с java без него никак
 
         val request: Request = Request.Builder()
             .url(URL)
@@ -36,6 +36,6 @@ class NetworkOkHttpImpl (
         val result: String = response.body!!.string()
 
         response.close()
-        return Json.decodeFromString(result)
+        return format.decodeFromString(result)
     }
 }

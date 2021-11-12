@@ -11,8 +11,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Lesson19">
-        <activity android:name=".presentation.view.DetailActivity"></activity>
-        <activity android:name=".presentation.view.ListActivity">
+
+        <activity android:name=".presentation.view.DetailActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".presentation.view.ListActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

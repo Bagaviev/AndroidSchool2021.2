@@ -1,9 +1,44 @@
 package com.example.lesson19.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.lesson19.data.IRepository
+import com.example.lesson19.domain.api_entities.RequestMain
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+
+
 /**
  * @author Bulat Bagaviev
  * @created 10.11.2021
  */
 
-class ListActivityViewModel {
+class ListActivityViewModel (private var repository: IRepository): ViewModel() {
+
+    private var mDisposable: Disposable? = CompositeDisposable()
+    private val mWeatherLiveData = MutableLiveData<RequestMain>()
+
+    fun doGet() {
+        mDisposable = repository.loadDataAsync()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { RequestMain ->
+                RequestMain?.let(mWeatherLiveData::setValue)
+            }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (mDisposable != null && !mDisposable!!.isDisposed) {
+            mDisposable!!.dispose()
+            mDisposable = null
+        }
+    }
+
+    fun getWeatherLiveData(): LiveData<RequestMain> {
+        return mWeatherLiveData
+    }
 }
