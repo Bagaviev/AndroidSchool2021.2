@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.lesson19.data.IRepository
+import com.example.lesson19.data.converter.UsefulFieldsExtractor
 import com.example.lesson19.domain.api_entities.RequestMain
+import com.example.lesson19.domain.our_entities.WeeklyWeather
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-
 
 /**
  * @author Bulat Bagaviev
@@ -19,15 +20,14 @@ import io.reactivex.schedulers.Schedulers
 class ListActivityViewModel (private var repository: IRepository): ViewModel() {
 
     private var mDisposable: Disposable? = CompositeDisposable()
-    private val mWeatherLiveData = MutableLiveData<RequestMain>()
+    private val mWeatherLiveData = MutableLiveData<List<WeeklyWeather>>()
 
     fun doGet() {
         mDisposable = repository.loadDataAsync()
+            .map { weeklyWeather -> UsefulFieldsExtractor.convert(weeklyWeather) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { RequestMain ->
-                RequestMain?.let(mWeatherLiveData::setValue)
-            }
+            .subscribe { weeklyWeather -> mWeatherLiveData.setValue(weeklyWeather) }
     }
 
     override fun onCleared() {
@@ -38,7 +38,7 @@ class ListActivityViewModel (private var repository: IRepository): ViewModel() {
         }
     }
 
-    fun getWeatherLiveData(): LiveData<RequestMain> {
+    fun getWeatherLiveData(): LiveData<List<WeeklyWeather>> {
         return mWeatherLiveData
     }
 }

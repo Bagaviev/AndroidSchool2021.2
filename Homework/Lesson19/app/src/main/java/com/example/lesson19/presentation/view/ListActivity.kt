@@ -9,6 +9,7 @@ import com.example.lesson19.data.Repository
 import com.example.lesson19.data.network.NetworkOkHttpImpl
 import com.example.lesson19.databinding.ActivityListBinding
 import com.example.lesson19.domain.api_entities.RequestMain
+import com.example.lesson19.domain.our_entities.WeeklyWeather
 import com.example.lesson19.presentation.viewmodel.ListActivityViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -27,11 +28,11 @@ class ListActivity : AppCompatActivity() {
         val view = binding!!.root
         setContentView(view)
 
-        createViewModel();
-        observeLiveData();
+        createViewModel()
+        observeLiveData()
 
         if (savedInstanceState == null) {
-            listActivityViewModel.doGet();
+            listActivityViewModel.doGet()
         }
     }
 
@@ -46,11 +47,11 @@ class ListActivity : AppCompatActivity() {
         }).get(ListActivityViewModel::class.java)
     }
 
-    private fun observeLiveData() {
-        listActivityViewModel.getWeatherLiveData().observe(this, this::showData);
+    private fun observeLiveData() {     // потом прикрутить swipe refresh layout и в нем вызывать только listActivityViewModel.doGet() в коллбеке layout'а, и при этом observeLiveData() больше нигде не вызывать. В таком случае обновление загруженных данных должно произойти само если я все правильно понимаю
+        listActivityViewModel.getWeatherLiveData().observe(this, this::showData)
     }
 
-    private fun showData(data: RequestMain) {
-        binding?.textView!!.text = data.daily.toString()
+    private fun showData(data: List<WeeklyWeather>) {
+        binding?.textView!!.text = data.toString()
     }
 }
