@@ -34,8 +34,8 @@ class UsefulFieldsExtractor {
 
                     result.add(WeeklyWeather(
                         dt.capitalize(),
-                        String.format("%.0f", dayTemp),
-                        String.format("%.0f", nightTemp),
+                        "День: " + String.format("%d", Math.round(dayTemp!!)) + "°C",
+                        "Ночь: " + String.format("%d", Math.round(nightTemp!!)) + "°C",
                         String.format("%.0f", pressure),
                         String.format("%d", humidity),
                         String.format("%.0f", windSpeed),

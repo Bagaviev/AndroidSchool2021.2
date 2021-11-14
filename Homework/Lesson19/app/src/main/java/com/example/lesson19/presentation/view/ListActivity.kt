@@ -1,19 +1,22 @@
 package com.example.lesson19.presentation.view
 
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import com.example.lesson19.R
 import com.example.lesson19.data.IRepository
 import com.example.lesson19.data.Repository
 import com.example.lesson19.data.network.NetworkOkHttpImpl
 import com.example.lesson19.databinding.ActivityListBinding
-import com.example.lesson19.domain.api_entities.RequestMain
 import com.example.lesson19.domain.our_entities.WeeklyWeather
+import com.example.lesson19.presentation.view.adapter.IClickListener
+import com.example.lesson19.presentation.view.adapter.WeatherListAdapter
 import com.example.lesson19.presentation.viewmodel.ListActivityViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 
@@ -21,6 +24,7 @@ class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
     private lateinit var listActivityViewModel: ListActivityViewModel
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListBinding.inflate(layoutInflater)
@@ -34,6 +38,10 @@ class ListActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             listActivityViewModel.doGet()
         }
+
+        val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)
+        itemDecoration.setDrawable(getDrawable(R.drawable.own_vertical_divider)!!)
+        binding!!.recView.addItemDecoration(itemDecoration)
     }
 
     private fun createViewModel() {
@@ -51,7 +59,15 @@ class ListActivity : AppCompatActivity() {
         listActivityViewModel.getWeatherLiveData().observe(this, this::showData)
     }
 
-    private fun showData(data: List<WeeklyWeather>) {
-        binding?.textView!!.text = data.toString()
+    private fun showData(weatherList: List<WeeklyWeather>) {
+        binding?.recView!!.adapter = WeatherListAdapter(weatherList, object: IClickListener {   // тут могло бы быть красивее, но увы как есть пока
+            override fun openItem(position: Int, weather: WeeklyWeather) {
+                Toast.makeText(applicationContext, "Был выбран пункт $position", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun startDetail() {
+
     }
 }
