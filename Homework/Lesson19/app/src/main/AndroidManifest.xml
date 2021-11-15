@@ -13,7 +13,11 @@
             android:theme="@style/Theme.Lesson19">
 
         <activity android:name=".presentation.view.DetailActivity"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="portrait"
+                  android:parentActivityName=".presentation.view.ListActivity">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".presentation.view.ListActivity" />
         </activity>
 
         <activity android:name=".presentation.view.ListActivity"

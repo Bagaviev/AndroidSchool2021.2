@@ -1,5 +1,6 @@
 package com.example.lesson19.presentation.view
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -23,6 +24,10 @@ import okhttp3.OkHttpClient
 class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
     private lateinit var listActivityViewModel: ListActivityViewModel
+
+    companion object {
+        var BUNDLE_SELECTED_DAY_KEY: String? = "BUNDLE_SELECTED_DAY_KEY"
+    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,12 +67,14 @@ class ListActivity : AppCompatActivity() {
     private fun showData(weatherList: List<WeeklyWeather>) {
         binding?.recView!!.adapter = WeatherListAdapter(weatherList, object: IClickListener {   // тут могло бы быть красивее, но увы как есть пока
             override fun openItem(position: Int, weather: WeeklyWeather) {
-                Toast.makeText(applicationContext, "Был выбран пункт $position", Toast.LENGTH_SHORT).show()
+                startDetail(weather)
             }
         })
     }
 
-    private fun startDetail() {
-
+    private fun startDetail(weather: WeeklyWeather) {
+        var intent = Intent(applicationContext, DetailActivity::class.java)
+        intent.putExtra(BUNDLE_SELECTED_DAY_KEY, weather)
+        startActivity(intent)
     }
 }

@@ -33,12 +33,12 @@ class UsefulFieldsExtractor {
                     val description = day.weather?.get(0)?.description?.lowercase()
 
                     result.add(WeeklyWeather(
-                        dt.capitalize(),
+                        dt.capitalize(),        // ранее тут была самописная хрень
                         "День: " + String.format("%d", Math.round(dayTemp!!)) + "°C",
                         "Ночь: " + String.format("%d", Math.round(nightTemp!!)) + "°C",
-                        String.format("%.0f", pressure),
-                        String.format("%d", humidity),
-                        String.format("%.0f", windSpeed),
+                        "Давление: " + String.format("%.0f", pressure) + " мм.рт",
+                        "Влажность: " + String.format("%d", humidity) + "%",
+                        "Ветер: " + String.format("%.0f", windSpeed) + " м/с",
                         description?.capitalize()
                     ))
                 }
