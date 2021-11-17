@@ -29,3 +29,7 @@ api.openweathermap.org/data/2.5/onecall?lat=55.727649&lon=37.536683&exclude=minu
 * pressure - давление, сконвертированне в мм. рт. столба
 * humidity - влажность в %
 * windSpeed - скорость ветра в м/с
+
+### Скрины:
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/tree/master/Homework/Lesson19/list.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/tree/master/Homework/Lesson19/detail.jpeg" align="left" height="500" width="250" ></a>
