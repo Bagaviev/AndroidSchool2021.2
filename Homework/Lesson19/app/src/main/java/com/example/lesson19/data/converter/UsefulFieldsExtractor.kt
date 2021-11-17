@@ -16,6 +16,15 @@ class UsefulFieldsExtractor {
     companion object {
         private const val HPA_TO_HGMM_COEF = 1.333
 
+        /**
+         * Конвертер и форматтер типов данных json
+         * Метод преобразующий объект запроса из сети RequestMain к самодельному списку объектов WeeklyWeather.
+         *
+         *
+         * @param mainRequest объект запроса из OkHttpClient, составной json, содержит полный набор атрибутов предметной области погоды.
+         * @return Список вспомогательных объектов, с сокращенным под наши нужды набором атрибутов, приведенными типами, а также с заданным форматированием для вывода..
+         */
+
         fun convert(mainRequest: RequestMain): List<WeeklyWeather> {
             val result = arrayListOf<WeeklyWeather>()
             var dailies = mainRequest.daily

@@ -14,10 +14,15 @@ import io.reactivex.schedulers.Schedulers
 /**
  * @author Bulat Bagaviev
  * @created 10.11.2021
+ *
+ * @param repository репозиторий бла бла
  */
 
 class ListActivityViewModel (private var repository: IRepository): ViewModel() {
 
+    /**
+     * @sample mDisposable Ну поле и поле, что дальше то
+     */
     private var mDisposable: Disposable? = CompositeDisposable()
 
     private val mWeatherLiveData = MutableLiveData<List<WeeklyWeather>>()
