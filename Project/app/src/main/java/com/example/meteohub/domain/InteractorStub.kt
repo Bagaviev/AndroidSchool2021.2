@@ -1,4 +1,4 @@
-package com.example.lesson19.domain
+package com.example.meteohub.domain
 
 /**
  * @author Bulat Bagaviev

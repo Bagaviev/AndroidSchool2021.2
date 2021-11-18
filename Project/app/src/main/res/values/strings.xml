@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Метео.Hub</string>
+    <string name="curr_lat">curr_lat</string>
+    <string name="curr_lon">curr_lon</string>
+</resources>

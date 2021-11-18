@@ -1,7 +1,7 @@
-package com.example.lesson19.data.converter
+package com.example.meteohub.data.converter
 
-import com.example.lesson19.domain.api_entities.RequestMain
-import com.example.lesson19.domain.our_entities.WeeklyWeather
+import com.example.meteohub.domain.api_entities.RequestMain
+import com.example.meteohub.domain.our_entities.WeeklyWeather
 import java.lang.String
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,7 +42,8 @@ class UsefulFieldsExtractor {
                     val windSpeed = day.windSpeed
                     val description = day.weather?.get(0)?.description?.lowercase()
 
-                    result.add(WeeklyWeather(
+                    result.add(
+                        WeeklyWeather(
                         dt.capitalize(),        // ранее тут была самописная хрень
                         "День: " + String.format("%d", Math.round(dayTemp!!)) + "°C",
                         "Ночь: " + String.format("%d", Math.round(nightTemp!!)) + "°C",
@@ -50,7 +51,8 @@ class UsefulFieldsExtractor {
                         "Влажность: " + String.format("%d", humidity) + "%",
                         "Ветер: " + String.format("%.0f", windSpeed) + " м/с",
                         description?.capitalize()
-                    ))
+                    )
+                    )
                 }
             }
 

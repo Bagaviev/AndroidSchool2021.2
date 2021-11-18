@@ -1,6 +1,5 @@
-package com.example.lesson19.domain.our_entities
+package com.example.meteohub.domain.our_entities
 
-import android.os.Parcelable
 import java.io.Serializable
 
 /**
