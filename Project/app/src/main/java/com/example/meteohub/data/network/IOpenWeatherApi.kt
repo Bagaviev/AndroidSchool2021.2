@@ -1,9 +1,7 @@
 package com.example.meteohub.data.network
 
-import com.example.meteohub.domain.api_entities.RequestMain
+import com.example.meteohub.domain.api_model.RequestMain
 import io.reactivex.Single
-import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -3,7 +3,7 @@ package com.example.meteohub.presentation.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.meteohub.databinding.ActivityDetailBinding
-import com.example.meteohub.domain.our_entities.WeeklyWeather
+import com.example.meteohub.domain.our_model.WeeklyWeather
 
 class DetailActivity : AppCompatActivity() {
     private var binding: ActivityDetailBinding? = null

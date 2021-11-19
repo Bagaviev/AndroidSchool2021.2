@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.meteohub.R
-import com.example.meteohub.domain.our_entities.WeeklyWeather
+import com.example.meteohub.domain.our_model.WeeklyWeather
 
 /**
  * @author Bulat Bagaviev

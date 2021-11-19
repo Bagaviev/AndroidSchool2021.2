@@ -15,17 +15,20 @@ import com.example.meteohub.data.IRepository
 import com.example.meteohub.data.Repository
 import com.example.meteohub.data.network.NetworkModule
 import com.example.meteohub.databinding.ActivityListBinding
-import com.example.meteohub.domain.our_entities.WeeklyWeather
+import com.example.meteohub.di.ApplicationComponent
+import com.example.meteohub.di.DaggerApplicationComponent
+import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.presentation.view.adapter.IClickListener
 import com.example.meteohub.presentation.view.adapter.WeatherListAdapter
 import com.example.meteohub.presentation.viewmodel.ListActivityViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
+import javax.inject.Inject
 
 class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
+
+    //    @Inject
     private lateinit var listActivityViewModel: ListActivityViewModel
 
     companion object {
@@ -53,8 +56,11 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun createViewModel() {
-        val repository: IRepository = Repository(NetworkModule())
-        // сюда надо вынести инициализацию конструкторов вплоть до OkHttp зачем то
+//      val repository: Repository = Repository(NetworkModule())
+
+        val repository: Repository = DaggerApplicationComponent.create().getRepository()
+
+//      DaggerApplicationComponent.create().inject(this)
 
         listActivityViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

@@ -1,6 +1,6 @@
 package com.example.meteohub.presentation.view.adapter
 
-import com.example.meteohub.domain.our_entities.WeeklyWeather
+import com.example.meteohub.domain.our_model.WeeklyWeather
 
 /**
  * @author Bulat Bagaviev

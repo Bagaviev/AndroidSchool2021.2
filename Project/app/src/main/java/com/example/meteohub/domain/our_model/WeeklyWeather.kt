@@ -1,4 +1,4 @@
-package com.example.meteohub.domain.our_entities
+package com.example.meteohub.domain.our_model
 
 import java.io.Serializable
 

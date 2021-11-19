@@ -1,6 +1,6 @@
 package com.example.meteohub.data
 
-import com.example.meteohub.domain.api_entities.RequestMain
+import com.example.meteohub.domain.api_model.RequestMain
 import io.reactivex.Single
 
 /**
