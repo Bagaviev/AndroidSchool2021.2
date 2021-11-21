@@ -3,8 +3,7 @@ package com.example.meteohub.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.meteohub.data.IRepository
-import com.example.meteohub.data.Repository
+import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.converter.UsefulFieldsExtractor
 import com.example.meteohub.data.network.NetworkModule
 import com.example.meteohub.domain.our_model.WeeklyWeather
@@ -21,7 +20,8 @@ import javax.inject.Inject
  * @param repository репозиторий бла бла
  */
 
-class ListActivityViewModel @Inject constructor (private var repository: Repository): ViewModel() {
+class ListActivityViewModel
+@Inject constructor (var repository: IRepository): ViewModel() {
 
     /** Ну поле и поле, что дальше то */
     private var mDisposable: Disposable? = CompositeDisposable()

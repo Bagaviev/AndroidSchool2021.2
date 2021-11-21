@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface IOpenWeatherApi {
+
     @GET("onecall?exclude=minutely,hourly,alerts&units=metric&lang=ru")
     fun getWeather(
         @Query("lat") lat: Double,

@@ -15,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 class NetworkModule: IOpenWeatherApi {
+
     @Provides
     fun provideRetrofitService(): IOpenWeatherApi {
         return Retrofit.Builder()

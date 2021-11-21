@@ -1,9 +1,7 @@
 package com.example.meteohub.di
 
-import com.example.meteohub.data.IRepository
-import com.example.meteohub.data.Repository
+import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.network.NetworkModule
-import com.example.meteohub.presentation.view.ListActivity
 import dagger.Component
 
 /**
@@ -11,10 +9,7 @@ import dagger.Component
  * @created 19.11.2021
  */
 
-@Component(modules = [NetworkModule::class])
+@Component(modules = [NetworkModule::class, AppModule::class])
 interface ApplicationComponent {
-
-//    fun inject(activity: ListActivity)
-
-    fun getRepository(): Repository
+    fun getRepository(): IRepository
 }

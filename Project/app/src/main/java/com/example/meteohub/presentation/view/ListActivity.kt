@@ -11,25 +11,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.meteohub.R
-import com.example.meteohub.data.IRepository
-import com.example.meteohub.data.Repository
+import com.example.meteohub.data.db.AppDatabase
 import com.example.meteohub.data.network.NetworkModule
 import com.example.meteohub.databinding.ActivityListBinding
-import com.example.meteohub.di.ApplicationComponent
-import com.example.meteohub.di.DaggerApplicationComponent
+import com.example.meteohub.di.MyApplication
+import com.example.meteohub.domain.IRepository
+import com.example.meteohub.domain.our_model.City
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.presentation.view.adapter.IClickListener
 import com.example.meteohub.presentation.view.adapter.WeatherListAdapter
 import com.example.meteohub.presentation.viewmodel.ListActivityViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import javax.inject.Inject
 
 class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
 
-    //    @Inject
+    private lateinit var db: AppDatabase
+
     private lateinit var listActivityViewModel: ListActivityViewModel
+
+    private var cityList = arrayListOf<City>()
 
     companion object {
         var BUNDLE_SELECTED_DAY_KEY: String? = "BUNDLE_SELECTED_DAY_KEY"
@@ -46,7 +48,7 @@ class ListActivity : AppCompatActivity() {
         createViewModel()
         subscribeForLiveData()
 
-        if (savedInstanceState == null) {   // местами поменять
+        if (savedInstanceState == null) {
             listActivityViewModel.publishToLiveData()
         }
 
@@ -55,12 +57,34 @@ class ListActivity : AppCompatActivity() {
         binding!!.recView.addItemDecoration(itemDecoration)
     }
 
+    override fun onStart() {
+        db = (applicationContext as MyApplication).getRoomInstance()
+
+        Log.e("db instance: ", "onStart: ${db.hashCode()}")
+
+        binding?.buttonLoad?.setOnClickListener {
+            loadFromDb()
+        }
+        super.onStart()
+    }
+
+    override fun onDestroy() {
+        db.close()
+        super.onDestroy()
+    }
+
+    private fun loadFromDb() {
+        Thread {    // data load from app.db file happens only once per first app install, other time reference lives in app class
+            val result = db.cityDao().getSampled(NetworkModule.lat, NetworkModule.lon)
+
+            runOnUiThread {
+                binding?.textViewDb?.text = result.toString()
+            }
+        }.start()
+    }
+
     private fun createViewModel() {
-//      val repository: Repository = Repository(NetworkModule())
-
-        val repository: Repository = DaggerApplicationComponent.create().getRepository()
-
-//      DaggerApplicationComponent.create().inject(this)
+        val repository: IRepository = (applicationContext as MyApplication).appComponent.getRepository()
 
         listActivityViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -76,7 +100,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun showError(error: Throwable) {
-        Log.e("TAG", "Some exceptions from Rx: $error");
+//        Log.e("TAG", "Some exceptions from Rx: $error");
         Snackbar.make(binding?.root!!, error.toString(), BaseTransientBottomBar.LENGTH_LONG).show();    // магия
     }
 

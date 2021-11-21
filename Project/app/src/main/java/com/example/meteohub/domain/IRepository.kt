@@ -1,4 +1,4 @@
-package com.example.meteohub.data
+package com.example.meteohub.domain
 
 import com.example.meteohub.domain.api_model.RequestMain
 import io.reactivex.Single
