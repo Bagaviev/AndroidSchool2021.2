@@ -3,19 +3,17 @@ package com.example.meteohub.di
 import android.app.Application
 import androidx.room.Room
 import com.example.meteohub.data.db.AppDatabase
-import dagger.Module
-import dagger.Provides
 
 /**
  * @author Bulat Bagaviev
  * @created 19.11.2021
  */
 
-open class MyApplication: Application() {
+open class ApplicationResLocator: Application() {
     private var instance: AppDatabase? = null
 
-    val appComponent: ApplicationComponent by lazy {
-        DaggerApplicationComponent.create()
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.create()
     }
 
     override fun onCreate() {
@@ -31,7 +29,7 @@ open class MyApplication: Application() {
         return instance!!
     }
 
-    fun getSelf(): MyApplication {
+    fun getSelf(): ApplicationResLocator {
         return this
     }
 }

@@ -11,7 +11,7 @@ import dagger.Module
  */
 
 @Module
-interface AppModule {
+interface RepositoryModule {
     @Binds
     fun convertInterfaceToImpl(instance: Repository): IRepository
 }

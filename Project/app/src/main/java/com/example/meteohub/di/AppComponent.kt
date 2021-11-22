@@ -9,7 +9,7 @@ import dagger.Component
  * @created 19.11.2021
  */
 
-@Component(modules = [NetworkModule::class, AppModule::class])
-interface ApplicationComponent {
+@Component(modules = [NetworkModule::class, RepositoryModule::class])
+interface AppComponent {
     fun getRepository(): IRepository
 }
