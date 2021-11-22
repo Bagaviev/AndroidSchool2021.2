@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.converter.UsefulFieldsExtractor
+import com.example.meteohub.data.db.AppDatabase
 import com.example.meteohub.data.network.NetworkModule
+import com.example.meteohub.di.MyApplication
+import com.example.meteohub.domain.our_model.City
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -21,7 +24,7 @@ import javax.inject.Inject
  */
 
 class ListActivityViewModel
-@Inject constructor (var repository: IRepository): ViewModel() {
+@Inject constructor (var repository: IRepository, var application: MyApplication): ViewModel() {
 
     /** Ну поле и поле, что дальше то */
     private var mDisposable: Disposable? = CompositeDisposable()
@@ -29,6 +32,10 @@ class ListActivityViewModel
     private val mWeatherLiveData = MutableLiveData<List<WeeklyWeather>>()
     private val mProgressLiveData = MutableLiveData<Boolean>()
     private val mErrorLiveData = MutableLiveData<Throwable>()
+
+    private val hCityLiveData = MutableLiveData<List<City>>()
+
+    private var appDb: AppDatabase? = application.getRoomInstance()
 
     fun publishToLiveData() {
         mDisposable = repository.loadWeatherAsync(NetworkModule.lat, NetworkModule.lon, NetworkModule.app_id)!!
@@ -44,7 +51,17 @@ class ListActivityViewModel
             .subscribe (mWeatherLiveData::setValue, mErrorLiveData::setValue)
     }
 
+    fun loadCities() {
+        mDisposable = repository.loadCitiesAsync(NetworkModule.lat, NetworkModule.lon, appDb?.cityDao()!!)
+            .subscribeOn(Schedulers.io())
+
+            .observeOn(AndroidSchedulers.mainThread())
+
+            .subscribe (hCityLiveData::setValue)
+    }
+
     override fun onCleared() {
+        appDb = null
         super.onCleared()
         if (mDisposable != null && !mDisposable!!.isDisposed) {
             mDisposable!!.dispose()
@@ -62,5 +79,9 @@ class ListActivityViewModel
 
     fun getProgressLiveData(): LiveData<Boolean> {
         return mProgressLiveData
+    }
+
+    fun getCitiesLiveData(): LiveData<List<City>> {
+        return hCityLiveData
     }
 }

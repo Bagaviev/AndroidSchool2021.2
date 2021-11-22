@@ -1,7 +1,7 @@
 package com.example.meteohub.di
 
-import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.network.NetworkModule
+import com.example.meteohub.domain.IRepository
 import dagger.Component
 
 /**

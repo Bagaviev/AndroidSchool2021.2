@@ -50,6 +50,7 @@ class ListActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             listActivityViewModel.publishToLiveData()
+            listActivityViewModel.loadCities()
         }
 
         val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)
@@ -57,7 +58,7 @@ class ListActivity : AppCompatActivity() {
         binding!!.recView.addItemDecoration(itemDecoration)
     }
 
-    override fun onStart() {
+   /* override fun onStart() {
         db = (applicationContext as MyApplication).getRoomInstance()
 
         Log.e("db instance: ", "onStart: ${db.hashCode()}")
@@ -66,14 +67,14 @@ class ListActivity : AppCompatActivity() {
             loadFromDb()
         }
         super.onStart()
-    }
+    }*/
 
     override fun onDestroy() {
-        db.close()
+//        db.close()
         super.onDestroy()
     }
 
-    private fun loadFromDb() {
+  /*  private fun loadFromDb() {
         Thread {    // data load from app.db file happens only once per first app install, other time reference lives in app class
             val result = db.cityDao().getSampled(NetworkModule.lat, NetworkModule.lon)
 
@@ -81,14 +82,14 @@ class ListActivity : AppCompatActivity() {
                 binding?.textViewDb?.text = result.toString()
             }
         }.start()
-    }
+    }*/
 
     private fun createViewModel() {
         val repository: IRepository = (applicationContext as MyApplication).appComponent.getRepository()
 
         listActivityViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return ListActivityViewModel(repository) as T
+                return ListActivityViewModel(repository, (applicationContext as MyApplication).getSelf()) as T
             }
         }).get(ListActivityViewModel::class.java)
     }
@@ -97,6 +98,12 @@ class ListActivity : AppCompatActivity() {
         listActivityViewModel.getWeatherLiveData().observe(this, this::showData)
         listActivityViewModel.getProgressLiveData().observe(this, this::showProgress);
         listActivityViewModel.getErrorLiveData().observe(this, this::showError);
+
+        listActivityViewModel.getCitiesLiveData().observe(this, this::showCity);
+    }
+
+    private fun showCity(cities: List<City>) {
+        binding?.textViewDb?.text = cities.toString()
     }
 
     private fun showError(error: Throwable) {

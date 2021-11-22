@@ -3,6 +3,8 @@ package com.example.meteohub.di
 import android.app.Application
 import androidx.room.Room
 import com.example.meteohub.data.db.AppDatabase
+import dagger.Module
+import dagger.Provides
 
 /**
  * @author Bulat Bagaviev
@@ -27,5 +29,9 @@ open class MyApplication: Application() {
 
     fun getRoomInstance(): AppDatabase {
         return instance!!
+    }
+
+    fun getSelf(): MyApplication {
+        return this
     }
 }
