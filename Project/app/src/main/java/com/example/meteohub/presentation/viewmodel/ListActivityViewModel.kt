@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.converter.UsefulFieldsExtractor
-import com.example.meteohub.data.db.AppDatabase
 import com.example.meteohub.data.network.NetworkModule
-import com.example.meteohub.di.ApplicationResLocator
-import com.example.meteohub.domain.our_model.City
 import com.example.meteohub.domain.our_model.WeeklyWeather
+import com.example.meteohub.utils.Constants.Companion.APP_ID
+import com.example.meteohub.utils.Constants.Companion.LAT
+import com.example.meteohub.utils.Constants.Companion.LON
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,8 +32,8 @@ class ListActivityViewModel
 
     private val mWeatherLiveData = MutableLiveData<List<WeeklyWeather>>()
 
-    fun publishToLiveData() {
-        mDisposable = repository.loadWeatherAsync(NetworkModule.lat, NetworkModule.lon, NetworkModule.app_id)!!
+    fun publishWeatherLiveData() {
+        mDisposable = repository.loadWeatherAsync(LAT, LON, APP_ID)!!
 
             .doOnSubscribe { mProgressLiveData.postValue(true) }
             .doAfterTerminate { mProgressLiveData.postValue(false) }

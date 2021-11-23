@@ -13,5 +13,7 @@ import io.reactivex.Single
 interface IRepository {
     fun loadWeatherAsync(lat: Double, lon: Double, app_id: String?): Single<RequestMain?>?
 
-    fun loadCitiesAsync(lat: Double, lon: Double, dbConnector: CityDao): Single<List<City>>
+    fun loadCitiesByCoordAsync(lat: Double, lon: Double, dbConnector: CityDao): Single<List<City>>
+
+    fun loadCitiesByNameAsync(cityName: String, dbConnector: CityDao): Single<List<City>>
 }

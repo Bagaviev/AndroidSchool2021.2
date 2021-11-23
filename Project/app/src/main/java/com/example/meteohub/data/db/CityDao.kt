@@ -13,9 +13,10 @@ import com.example.meteohub.domain.our_model.City
 @Dao
 interface CityDao {
     @Query("SELECT * FROM Cities WHERE abs(lat - :latArg) < 0.5 AND abs(lon - :lonArg) < 0.5")
-    fun getSampled(latArg: Double, lonArg: Double): List<City>
+    fun getCloseCitiesByCoords(latArg: Double, lonArg: Double): List<City>
 
-    //    single Rx
+    @Query("SELECT * FROM Cities WHERE lower(cityName) LIKE '%' || :cityName || '%'")
+    fun getCitiesByName(cityName: String): List<City>
 
     @Insert
     fun insertAll(cities: List<City>)

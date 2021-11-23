@@ -20,7 +20,11 @@ class Repository
         return networkConnector.getWeather(lat, lon, app_id)
     }
 
-    override fun loadCitiesAsync(lat: Double, lon: Double, dbConnector: CityDao): Single<List<City>> {
-        return Single.fromCallable { dbConnector.getSampled(lat, lon) }
+    override fun loadCitiesByCoordAsync(lat: Double, lon: Double, dbConnector: CityDao): Single<List<City>> {
+        return Single.fromCallable { dbConnector.getCloseCitiesByCoords(lat, lon) }
+    }
+
+    override fun loadCitiesByNameAsync(cityName: String, dbConnector: CityDao): Single<List<City>> {
+        return Single.fromCallable { dbConnector.getCitiesByName(cityName) }
     }
 }

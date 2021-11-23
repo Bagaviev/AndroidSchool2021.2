@@ -8,6 +8,9 @@ import com.example.meteohub.data.network.NetworkModule
 import com.example.meteohub.di.ApplicationResLocator
 import com.example.meteohub.domain.IRepository
 import com.example.meteohub.domain.our_model.City
+import com.example.meteohub.utils.Constants.Companion.CITY_NAME
+import com.example.meteohub.utils.Constants.Companion.LAT
+import com.example.meteohub.utils.Constants.Companion.LON
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -20,17 +23,19 @@ import javax.inject.Inject
  */
 
 class SettingsActivityViewModel
-@Inject constructor(var repository: IRepository, var applicationResLocator: ApplicationResLocator): ViewModel() {
+@Inject constructor(var repository: IRepository,
+                    var applicationResLocator: ApplicationResLocator): ViewModel() {
 
     private var mDisposable: Disposable? = CompositeDisposable()
     private val mErrorLiveData = MutableLiveData<Throwable>()
     private val mProgressLiveData = MutableLiveData<Boolean>()
 
-    private val hCityLiveData = MutableLiveData<List<City>>()
+    private val mCityCoordsLiveData = MutableLiveData<List<City>>()
+    private val mCityNameLiveData = MutableLiveData<List<City>>()
     private var appDb: AppDatabase? = applicationResLocator.getRoomInstance()
 
-    fun publishToLiveData() {
-        mDisposable = repository.loadCitiesAsync(NetworkModule.lat, NetworkModule.lon, appDb?.cityDao()!!)
+    fun publishCitiesByCoordLiveData() {
+        mDisposable = repository.loadCitiesByCoordAsync(LAT, LON, appDb?.cityDao()!!)
 
             .doOnSubscribe { mProgressLiveData.postValue(true) }
             .doAfterTerminate { mProgressLiveData.postValue(false) }
@@ -38,7 +43,19 @@ class SettingsActivityViewModel
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-            .subscribe (hCityLiveData::setValue)
+            .subscribe (mCityCoordsLiveData::setValue)
+    }
+
+    fun publishCitiesByNameLiveData() {
+        mDisposable = repository.loadCitiesByNameAsync(CITY_NAME.lowercase(), appDb?.cityDao()!!)
+
+            .doOnSubscribe { mProgressLiveData.postValue(true) }
+            .doAfterTerminate { mProgressLiveData.postValue(false) }
+
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
+            .subscribe (mCityNameLiveData::setValue)
     }
 
     override fun onCleared() {
@@ -51,8 +68,12 @@ class SettingsActivityViewModel
         }
     }
 
-    fun getCitiesLiveData(): LiveData<List<City>> {
-        return hCityLiveData
+    fun getCitiesCoordLiveData(): LiveData<List<City>> {
+        return mCityCoordsLiveData
+    }
+
+    fun getCitiesNameLiveData(): LiveData<List<City>> {
+        return mCityNameLiveData
     }
 
     fun getErrorLiveData(): LiveData<Throwable> {

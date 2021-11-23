@@ -41,7 +41,7 @@ class ListActivity : AppCompatActivity() {
         subscribeForLiveData()
 
         if (savedInstanceState == null) {
-            listActivityViewModel.publishToLiveData()
+            listActivityViewModel.publishWeatherLiveData()
         }
 
         val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)

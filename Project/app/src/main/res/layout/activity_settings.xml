@@ -27,16 +27,16 @@
     </ScrollView>
 
     <Button
-            android:text="Load"
+            android:text="Coords"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/buttonLoadDb"
+            android:id="@+id/buttonLoadCoords"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.708"
             app:layout_constraintTop_toBottomOf="@+id/progressBar2"
-            app:layout_constraintVertical_bias="0.145" />
+            app:layout_constraintVertical_bias="0.142" />
 
     <ProgressBar
             style="?android:attr/progressBarStyle"
@@ -50,4 +50,28 @@
             android:layout_marginTop="32dp"
             android:visibility="invisible"
             tools:visibility="invisible" />
+
+    <Button
+            android:text="Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonLoadName"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.309"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.142" />
+
+    <Button
+            android:text="Permission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonPermission"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.39" />
 </androidx.constraintlayout.widget.ConstraintLayout>
