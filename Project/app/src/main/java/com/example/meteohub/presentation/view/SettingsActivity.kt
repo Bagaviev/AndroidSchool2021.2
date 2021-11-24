@@ -3,6 +3,7 @@ package com.example.meteohub.presentation.view
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +12,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.meteohub.databinding.ActivitySettingsBinding
@@ -22,11 +22,10 @@ import com.example.meteohub.presentation.viewmodel.SettingsActivityViewModel
 import com.example.meteohub.utils.Constants.Companion.GPS_PERMISSION_CODE
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
 
 class SettingsActivity : AppCompatActivity() {
     private var binding: ActivitySettingsBinding? = null
-
-    private var locationManager: LocationManager? = null
 
     private lateinit var settingsActivityViewModel: SettingsActivityViewModel
 
@@ -37,8 +36,6 @@ class SettingsActivity : AppCompatActivity() {
         val view = binding!!.root
         setContentView(view)
 
-        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-
         createViewModel()
         subscribeForLiveData()
     }
@@ -47,12 +44,11 @@ class SettingsActivity : AppCompatActivity() {
     override fun onStart() {
         binding?.buttonLoadCoords?.setOnClickListener { settingsActivityViewModel.publishCitiesByCoordLiveData() }
         binding?.buttonLoadName?.setOnClickListener { settingsActivityViewModel.publishCitiesByNameLiveData() }
-        binding?.buttonPermission?.setOnClickListener { handlePermission() }
+        binding?.buttonPermission?.setOnClickListener { handleGps() }
         super.onStart()
     }
 
     override fun onDestroy() {
-        locationManager = null
         super.onDestroy()
     }
 
@@ -68,9 +64,11 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun subscribeForLiveData() {
         settingsActivityViewModel.getCitiesCoordLiveData().observe(this, this::showCity)
+        settingsActivityViewModel.getCitiesNameLiveData().observe(this, this::showCity)
+        settingsActivityViewModel.getCoordsLiveData().observe(this, this::showLocations)
+
         settingsActivityViewModel.getProgressLiveData().observe(this, this::showProgress)
         settingsActivityViewModel.getErrorLiveData().observe(this, this::showError)
-        settingsActivityViewModel.getCitiesNameLiveData().observe(this, this::showCity)
     }
 
     private fun showCity(cities: List<City>) {
@@ -87,21 +85,17 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun handlePermission() {
-        if (isLocationGranted()) {
-            if (!isGpsEnabled()!!) startGpsSettings()
+    private fun handleGps() {
+        if (settingsActivityViewModel.locationModule!!.isGpsAvailableOnDevice()) {
+            if (settingsActivityViewModel.locationModule!!.isLocationGranted()) {
 
-            binding?.textViewDb?.text = "gps request data..."
-            /*locationManager!!.requestSingleUpdate(
-                LocationManager.GPS_PROVIDER,
-                locationListener,
-                null
-            )
-            locationObj = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)*/
+                settingsActivityViewModel.locationModule!!.handleGpsSettings()
+                settingsActivityViewModel.publishLocationsLiveData()
 
-        } else {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), GPS_PERMISSION_CODE)
-        }
+            } else
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), GPS_PERMISSION_CODE)
+        } else
+            Toast.makeText(this, "No GPS module", Toast.LENGTH_LONG).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -112,35 +106,24 @@ class SettingsActivity : AppCompatActivity() {
             GPS_PERMISSION_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
-                        if (!isGpsEnabled()!!) startGpsSettings()
 
-                        /*locationManager.requestSingleUpdate(
-                        LocationManager.GPS_PROVIDER,
-                        locationListener,
-                        null
-                    )
-                    locationObj =
-                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)*/
-//                        updLocation(locationObj)  // метод запроса GPS в репозиторий вынести, также сверить корректность в лекции Василия
+                        settingsActivityViewModel.locationModule!!.handleGpsSettings()
+                        settingsActivityViewModel.publishLocationsLiveData()
 
                     } catch (e: SecurityException) { binding?.textViewDb?.text = e.message }
                 }
-                else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))
                     Toast.makeText(this, "We need that permission", Toast.LENGTH_LONG).show()
-                } else {
+                else
                     binding?.textViewDb?.text = "Not working without permission"
-                }
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun isLocationGranted() =
-        checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-    private fun isGpsEnabled() =
-        locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
-
-    private fun startGpsSettings() =
-        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+    private fun showLocations(location: Location?) {
+        var msg = ""
+        if (location == null)
+            msg += "no data"
+        binding?.textViewDb?.text = "lat: ${location?.latitude}, lon: ${location?.longitude}" + "$msg"
+    }
 }

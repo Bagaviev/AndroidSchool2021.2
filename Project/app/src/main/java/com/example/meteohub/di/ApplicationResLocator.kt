@@ -1,6 +1,8 @@
 package com.example.meteohub.di
 
 import android.app.Application
+import android.content.Context
+import android.location.LocationManager
 import androidx.room.Room
 import com.example.meteohub.data.db.AppDatabase
 
@@ -10,23 +12,32 @@ import com.example.meteohub.data.db.AppDatabase
  */
 
 open class ApplicationResLocator: Application() {
-    private var instance: AppDatabase? = null
+    private var dbInstance: AppDatabase? = null
+    private var locationInstance: LocationManager? = null
 
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.create()
     }
 
     override fun onCreate() {
-        if (instance == null) {
-            instance = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "city.db")
+        if (dbInstance == null) {
+            dbInstance = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "city.db")
                 .createFromAsset("app.db")
                 .build()
         }
+
+        if (locationInstance == null)
+            locationInstance = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
         super.onCreate()
     }
 
     fun getRoomInstance(): AppDatabase {
-        return instance!!
+        return dbInstance!!
+    }
+
+    fun getLocationService(): LocationManager {
+        return locationInstance!!
     }
 
     fun getSelf(): ApplicationResLocator {

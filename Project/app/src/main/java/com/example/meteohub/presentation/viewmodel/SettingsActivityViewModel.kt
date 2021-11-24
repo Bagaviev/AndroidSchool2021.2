@@ -1,9 +1,13 @@
 package com.example.meteohub.presentation.viewmodel
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
+import android.location.Location
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.meteohub.data.db.AppDatabase
+import com.example.meteohub.data.location.LocationModule
 import com.example.meteohub.data.network.NetworkModule
 import com.example.meteohub.di.ApplicationResLocator
 import com.example.meteohub.domain.IRepository
@@ -32,7 +36,10 @@ class SettingsActivityViewModel
 
     private val mCityCoordsLiveData = MutableLiveData<List<City>>()
     private val mCityNameLiveData = MutableLiveData<List<City>>()
+    private val mLocationsLiveData = MutableLiveData<Location>()
+
     private var appDb: AppDatabase? = applicationResLocator.getRoomInstance()
+    var locationModule: LocationModule? = LocationModule(applicationResLocator)
 
     fun publishCitiesByCoordLiveData() {
         mDisposable = repository.loadCitiesByCoordAsync(LAT, LON, appDb?.cityDao()!!)
@@ -43,7 +50,7 @@ class SettingsActivityViewModel
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-            .subscribe (mCityCoordsLiveData::setValue)
+            .subscribe (mCityCoordsLiveData::setValue, mErrorLiveData::setValue)
     }
 
     fun publishCitiesByNameLiveData() {
@@ -55,12 +62,25 @@ class SettingsActivityViewModel
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-            .subscribe (mCityNameLiveData::setValue)
+            .subscribe (mCityNameLiveData::setValue, mErrorLiveData::setValue)
+    }
+
+    fun publishLocationsLiveData() {
+        mDisposable = repository.loadLocationsAsync(locationModule!!)
+
+            .doOnSubscribe { mProgressLiveData.postValue(true) }
+            .doAfterTerminate { mProgressLiveData.postValue(false) }
+
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
+            .subscribe (mLocationsLiveData::setValue, mErrorLiveData::setValue)
     }
 
     override fun onCleared() {
         appDb?.close()
         appDb = null
+        locationModule = null
         super.onCleared()
         if (mDisposable != null && !mDisposable!!.isDisposed) {
             mDisposable!!.dispose()
@@ -82,5 +102,9 @@ class SettingsActivityViewModel
 
     fun getProgressLiveData(): LiveData<Boolean> {
         return mProgressLiveData
+    }
+
+    fun getCoordsLiveData(): LiveData<Location> {
+        return mLocationsLiveData
     }
 }

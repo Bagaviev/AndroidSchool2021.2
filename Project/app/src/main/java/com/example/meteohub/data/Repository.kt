@@ -1,10 +1,14 @@
 package com.example.meteohub.data
 
+import android.location.Location
+import android.location.LocationManager
 import com.example.meteohub.data.db.CityDao
+import com.example.meteohub.data.location.LocationModule
 import com.example.meteohub.data.network.IOpenWeatherApi
 import com.example.meteohub.domain.IRepository
 import com.example.meteohub.domain.api_model.RequestMain
 import com.example.meteohub.domain.our_model.City
+import io.reactivex.Maybe
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -26,5 +30,9 @@ class Repository
 
     override fun loadCitiesByNameAsync(cityName: String, dbConnector: CityDao): Single<List<City>> {
         return Single.fromCallable { dbConnector.getCitiesByName(cityName) }
+    }
+
+    override fun loadLocationsAsync(locationModule: LocationModule): Maybe<Location?> {
+        return Maybe.fromCallable { locationModule.findLocation() }
     }
 }
