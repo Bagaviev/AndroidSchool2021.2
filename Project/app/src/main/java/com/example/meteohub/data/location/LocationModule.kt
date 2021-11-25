@@ -35,15 +35,15 @@ class LocationModule(var applicationResLocator: ApplicationResLocator) {
     fun isLocationGranted() =
         checkSelfPermission(applicationResLocator, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-    fun handleGpsSettings() {
+    fun handleGpsSettings(context: Context) {
         if (!applicationResLocator.getLocationService().isProviderEnabled(LocationManager.GPS_PROVIDER))
-            startActivity(applicationResLocator, Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), null)
+            startActivity(context, Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), null)
     }
 
     fun isGpsAvailableOnDevice() =
         applicationResLocator.packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)
 
-    fun calcDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
+    private fun calcDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Float {
         val locA = Location("point A")
         val locB = Location("point B")
 
@@ -56,22 +56,20 @@ class LocationModule(var applicationResLocator: ApplicationResLocator) {
         return locA.distanceTo(locB)
     }
 
-    /*@RequiresApi(api = Build.VERSION_CODES.N)
-    fun getClosestCity(lat: Double, lon: Double): City? {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    fun getClosestCity(locationToCalc: Location, cities: List<City>): City {
         val map: MutableMap<Float, City> = TreeMap()
-        for (i in 0 until MainActivity.cityList.size()) {     // state по погоде хранится в первом классе
-            val distance = calcDistance(
-                lat,
-                lon,
-                MainActivity.cityList.get(i).getLat(),
-                MainActivity.cityList.get(i).getLon()
-            )
-            map[distance] = MainActivity.cityList.get(i)
+
+        for (i in cities.indices) {
+            val distance = calcDistance(locationToCalc.latitude, locationToCalc.longitude,
+                cities[i].lat, cities[i].lon)
+
+            map[distance] = cities[i]
         }
         val actualValue: Map.Entry<Float, City> = map.entries
             .stream()
             .findFirst()
             .get()
         return actualValue.value
-    }*/
+    }
 }

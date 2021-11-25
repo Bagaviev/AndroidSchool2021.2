@@ -14,6 +14,7 @@ import com.example.meteohub.R
 import com.example.meteohub.databinding.ActivityListBinding
 import com.example.meteohub.di.ApplicationResLocator
 import com.example.meteohub.domain.IRepository
+import com.example.meteohub.domain.our_model.City
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.presentation.view.adapter.IClickListener
 import com.example.meteohub.presentation.view.adapter.WeatherListAdapter
@@ -25,6 +26,8 @@ class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
 
     private lateinit var listActivityViewModel: ListActivityViewModel
+
+    private var savedCity: City? = null
 
     companion object {
         var BUNDLE_SELECTED_DAY_KEY: String? = "BUNDLE_SELECTED_DAY_KEY"
@@ -41,9 +44,13 @@ class ListActivity : AppCompatActivity() {
         createViewModel()
         subscribeForLiveData()
 
-        if (savedInstanceState == null) {
-            listActivityViewModel.publishWeatherLiveData()
-        }
+        savedCity = listActivityViewModel.applicationResLocator.readFromPrefs()
+
+        if (savedCity!!.lat == 0.0)
+            startSettings()
+
+        if (savedInstanceState == null)
+            listActivityViewModel.publishWeatherLiveData(savedCity!!.lat, savedCity!!.lon)
 
         val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)
         itemDecoration.setDrawable(getDrawable(R.drawable.own_vertical_divider)!!)
@@ -56,6 +63,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        savedCity = null
         super.onDestroy()
     }
 
@@ -64,7 +72,7 @@ class ListActivity : AppCompatActivity() {
 
         listActivityViewModel = ViewModelProvider(this, object: ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return ListActivityViewModel(repository) as T
+                return ListActivityViewModel(repository, (applicationContext as ApplicationResLocator).getSelf()) as T
             }
         }).get(ListActivityViewModel::class.java)
     }

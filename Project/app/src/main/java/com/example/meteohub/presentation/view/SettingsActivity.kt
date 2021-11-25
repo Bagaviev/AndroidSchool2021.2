@@ -1,14 +1,15 @@
 package com.example.meteohub.presentation.view
 
 import android.Manifest
-import android.content.Intent
+import android.R
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -22,14 +23,16 @@ import com.example.meteohub.presentation.viewmodel.SettingsActivityViewModel
 import com.example.meteohub.utils.Constants.Companion.GPS_PERMISSION_CODE
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import java.util.*
 
 class SettingsActivity : AppCompatActivity() {
     private var binding: ActivitySettingsBinding? = null
 
     private lateinit var settingsActivityViewModel: SettingsActivityViewModel
 
+    private var cityListMappingCache: HashMap<String, City> = hashMapOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 
@@ -38,18 +41,51 @@ class SettingsActivity : AppCompatActivity() {
 
         createViewModel()
         subscribeForLiveData()
+
+        if (savedInstanceState == null) {
+            settingsActivityViewModel.publishAllCitiesStringsLiveData()
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onStart() {
-        binding?.buttonLoadCoords?.setOnClickListener { settingsActivityViewModel.publishCitiesByCoordLiveData() }
-        binding?.buttonLoadName?.setOnClickListener { settingsActivityViewModel.publishCitiesByNameLiveData() }
         binding?.buttonPermission?.setOnClickListener { handleGps() }
+
+        binding?.searchView?.setOnQueryTextFocusChangeListener { _, _ ->
+            initSearchView()
+            binding?.searchResultsList!!.visibility = View.VISIBLE
+        }
         super.onStart()
     }
 
     override fun onDestroy() {
+        cityListMappingCache.clear()
         super.onDestroy()
+    }
+
+    private fun initSearchView() {
+        var adapter = ArrayAdapter(this, R.layout.simple_list_item_1, cityListMappingCache.keys.toList())
+        binding?.searchResultsList?.adapter = adapter
+
+        binding?.searchResultsList?.setOnItemClickListener { parent, _, position, _ ->
+            var cityNameSelected = parent.getItemAtPosition(position)
+
+            settingsActivityViewModel.applicationResLocator.saveToPrefs(cityListMappingCache[cityNameSelected]!!)
+
+            Toast.makeText(this@SettingsActivity, "Выбран город: $cityNameSelected", Toast.LENGTH_LONG).show()
+
+            binding?.searchView?.clearFocus()
+            binding?.searchResultsList!!.visibility = View.INVISIBLE
+        }
+
+        binding?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String) = false
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
     }
 
     private fun createViewModel() {
@@ -63,16 +99,14 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun subscribeForLiveData() {
-        settingsActivityViewModel.getCitiesCoordLiveData().observe(this, this::showCity)
-        settingsActivityViewModel.getCitiesNameLiveData().observe(this, this::showCity)
-        settingsActivityViewModel.getCoordsLiveData().observe(this, this::showLocations)
-
+        settingsActivityViewModel.getAllCitiesLiveData().observe(this, this::loadCityList)
         settingsActivityViewModel.getProgressLiveData().observe(this, this::showProgress)
         settingsActivityViewModel.getErrorLiveData().observe(this, this::showError)
     }
 
-    private fun showCity(cities: List<City>) {
-        binding?.textViewDb?.text = cities.toString()
+    private fun loadCityList(cities: List<City>) {
+        val keys = cities.map { it.cityName + ", " + it.countryName }
+        cityListMappingCache = keys.zip(cities).toMap() as HashMap<String, City>
     }
 
     private fun showError(error: Throwable) {
@@ -84,13 +118,13 @@ class SettingsActivity : AppCompatActivity() {
         else binding?.progressBar2?.visibility = View.INVISIBLE
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun handleGps() {
         if (settingsActivityViewModel.locationModule!!.isGpsAvailableOnDevice()) {
             if (settingsActivityViewModel.locationModule!!.isLocationGranted()) {
 
-                settingsActivityViewModel.locationModule!!.handleGpsSettings()
-                settingsActivityViewModel.publishLocationsLiveData()
+                settingsActivityViewModel.locationModule!!.handleGpsSettings(this)
+                settingsActivityViewModel.findCurrentCityAsync()
 
             } else
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), GPS_PERMISSION_CODE)
@@ -98,7 +132,7 @@ class SettingsActivity : AppCompatActivity() {
             Toast.makeText(this, "No GPS module", Toast.LENGTH_LONG).show()
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -107,8 +141,8 @@ class SettingsActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
 
-                        settingsActivityViewModel.locationModule!!.handleGpsSettings()
-                        settingsActivityViewModel.publishLocationsLiveData()
+                        settingsActivityViewModel.locationModule!!.handleGpsSettings(this)
+                        settingsActivityViewModel.findCurrentCityAsync()
 
                     } catch (e: SecurityException) { binding?.textViewDb?.text = e.message }
                 }
@@ -118,12 +152,5 @@ class SettingsActivity : AppCompatActivity() {
                     binding?.textViewDb?.text = "Not working without permission"
             }
         }
-    }
-
-    private fun showLocations(location: Location?) {
-        var msg = ""
-        if (location == null)
-            msg += "no data"
-        binding?.textViewDb?.text = "lat: ${location?.latitude}, lon: ${location?.longitude}" + "$msg"
     }
 }

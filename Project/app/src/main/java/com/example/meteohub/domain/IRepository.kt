@@ -18,7 +18,7 @@ interface IRepository {
 
     fun loadCitiesByCoordAsync(lat: Double, lon: Double, dbConnector: CityDao): Single<List<City>>
 
-    fun loadCitiesByNameAsync(cityName: String, dbConnector: CityDao): Single<List<City>>
+    fun loadAllCitiesAsync(dbConnector: CityDao): Single<List<City>>
 
-    fun loadLocationsAsync(locationModule: LocationModule): Maybe<Location?>
+    fun loadLocationAsync(locationModule: LocationModule): Maybe<Location?>
 }

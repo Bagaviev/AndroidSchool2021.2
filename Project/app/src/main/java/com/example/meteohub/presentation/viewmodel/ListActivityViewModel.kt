@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.converter.UsefulFieldsExtractor
 import com.example.meteohub.data.network.NetworkModule
+import com.example.meteohub.di.ApplicationResLocator
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.utils.Constants.Companion.APP_ID
 import com.example.meteohub.utils.Constants.Companion.LAT
@@ -24,16 +25,17 @@ import javax.inject.Inject
  */
 
 class ListActivityViewModel
-@Inject constructor (var repository: IRepository): ViewModel() {
+@Inject constructor (var repository: IRepository,
+                     var applicationResLocator: ApplicationResLocator): ViewModel() {
 
-    private var mDisposable: Disposable? = CompositeDisposable()
+    private var mDisposable: CompositeDisposable? = CompositeDisposable()
     private val mErrorLiveData = MutableLiveData<Throwable>()
     private val mProgressLiveData = MutableLiveData<Boolean>()
 
     private val mWeatherLiveData = MutableLiveData<List<WeeklyWeather>>()
 
-    fun publishWeatherLiveData() {
-        mDisposable = repository.loadWeatherAsync(LAT, LON, APP_ID)!!
+    fun publishWeatherLiveData(lat: Double, lon: Double) {
+        var disposable = repository.loadWeatherAsync(lat, lon, APP_ID)!!
 
             .doOnSubscribe { mProgressLiveData.postValue(true) }
             .doAfterTerminate { mProgressLiveData.postValue(false) }
@@ -44,12 +46,13 @@ class ListActivityViewModel
             .observeOn(AndroidSchedulers.mainThread())
 
             .subscribe (mWeatherLiveData::setValue, mErrorLiveData::setValue)
+        mDisposable?.add(disposable)
     }
 
     override fun onCleared() {
         super.onCleared()
-        if (mDisposable != null && !mDisposable!!.isDisposed) {
-            mDisposable!!.dispose()
+        if (!mDisposable?.isDisposed!!) {
+            mDisposable?.dispose()
             mDisposable = null
         }
     }

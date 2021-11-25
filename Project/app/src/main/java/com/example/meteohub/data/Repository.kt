@@ -28,11 +28,11 @@ class Repository
         return Single.fromCallable { dbConnector.getCloseCitiesByCoords(lat, lon) }
     }
 
-    override fun loadCitiesByNameAsync(cityName: String, dbConnector: CityDao): Single<List<City>> {
-        return Single.fromCallable { dbConnector.getCitiesByName(cityName) }
+    override fun loadAllCitiesAsync(dbConnector: CityDao): Single<List<City>> {
+        return Single.fromCallable { dbConnector.getAllCities() }
     }
 
-    override fun loadLocationsAsync(locationModule: LocationModule): Maybe<Location?> {
+    override fun loadLocationAsync(locationModule: LocationModule): Maybe<Location?> {
         return Maybe.fromCallable { locationModule.findLocation() }
     }
 }
