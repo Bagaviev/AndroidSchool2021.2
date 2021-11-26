@@ -45,5 +45,4 @@ data class Current(
     var windDeg: Int,
 
     @SerializedName("weather")
-    var weather: List<Weather>?) {
-}
+    var weather: List<Weather>?)

@@ -32,7 +32,6 @@ class SettingsActivity : AppCompatActivity() {
     private var cityListMappingCache: HashMap<String, City> = hashMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 
@@ -49,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onStart() {
-        binding?.buttonPermission?.setOnClickListener { handleGps() }
+        binding?.imageButtonGps?.setOnClickListener { handleGps() }
 
         binding?.searchView?.setOnQueryTextFocusChangeListener { _, _ ->
             initSearchView()
@@ -68,11 +67,10 @@ class SettingsActivity : AppCompatActivity() {
         binding?.searchResultsList?.adapter = adapter
 
         binding?.searchResultsList?.setOnItemClickListener { parent, _, position, _ ->
-            var cityNameSelected = parent.getItemAtPosition(position)
+            var cityNameSelected = parent.getItemAtPosition(position) as String
 
             settingsActivityViewModel.applicationResLocator.saveToPrefs(cityListMappingCache[cityNameSelected]!!)
-
-            Toast.makeText(this@SettingsActivity, "Выбран город: $cityNameSelected", Toast.LENGTH_LONG).show()
+            showSelectedCity(cityListMappingCache[cityNameSelected]!!)
 
             binding?.searchView?.clearFocus()
             binding?.searchResultsList!!.visibility = View.INVISIBLE
@@ -88,6 +86,14 @@ class SettingsActivity : AppCompatActivity() {
         })
     }
 
+    private fun showSelectedCity(city: City) {
+        Toast.makeText(this@SettingsActivity, "Выбран город: ${city.cityName}", Toast.LENGTH_LONG).show()
+        binding?.selectedCityTv?.apply {
+            text = "Город: ${city.cityName}"
+            visibility = View.VISIBLE
+        }
+    }
+
     private fun createViewModel() {
         val repository: IRepository = (applicationContext as ApplicationResLocator).appComponent.getRepository()
 
@@ -100,6 +106,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun subscribeForLiveData() {
         settingsActivityViewModel.getAllCitiesLiveData().observe(this, this::loadCityList)
+        settingsActivityViewModel.getCityByCoordsLiveData().observe(this, this::showSelectedCity)
         settingsActivityViewModel.getProgressLiveData().observe(this, this::showProgress)
         settingsActivityViewModel.getErrorLiveData().observe(this, this::showError)
     }
@@ -144,12 +151,12 @@ class SettingsActivity : AppCompatActivity() {
                         settingsActivityViewModel.locationModule!!.handleGpsSettings(this)
                         settingsActivityViewModel.findCurrentCityAsync()
 
-                    } catch (e: SecurityException) { binding?.textViewDb?.text = e.message }
+                    } catch (e: SecurityException) { showError(e) }
                 }
                 else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))
                     Toast.makeText(this, "We need that permission", Toast.LENGTH_LONG).show()
                 else
-                    binding?.textViewDb?.text = "Not working without permission"
+                    Toast.makeText(this, "Not working without permission", Toast.LENGTH_LONG).show()
             }
         }
     }

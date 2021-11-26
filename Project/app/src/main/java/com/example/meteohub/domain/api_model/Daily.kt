@@ -61,5 +61,4 @@ data class Daily (
     var snow: Double? = null,
 
     @SerializedName("uvi")
-    var uvi: Double) {
-}
+    var uvi: Double)

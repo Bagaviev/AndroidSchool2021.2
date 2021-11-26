@@ -19,5 +19,4 @@ data class RequestMain (
     var current: Current?,
 
     @SerializedName("daily")
-    var daily: List<Daily>?) {
-}
+    var daily: List<Daily>?)

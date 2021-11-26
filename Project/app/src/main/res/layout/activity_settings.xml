@@ -4,58 +4,46 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.view.SettingsActivity">
+        tools:context=".presentation.view.SettingsActivity"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/gradient_selector_bg">
 
-    <SearchView
-            android:layout_width="332dp"
-            android:layout_height="56dp"
-            app:layout_constraintTop_toTopOf="parent"
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="300dp"
+            android:layout_height="1dp"
+            android:id="@+id/textViewDivH2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="28dp"
-            app:layout_constraintHorizontal_bias="0.503"
-            android:id="@+id/searchView"
-            android:queryHint="Введите название города"
-            android:iconifiedByDefault="false" />
+            android:background="#FFFFFF"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSettingsInfo"
+            android:layout_marginTop="4dp" />
 
     <ListView
             android:layout_width="281dp"
-            android:layout_height="200dp"
+            android:layout_height="253dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchView"
-            android:id="@+id/searchResultsList" />
-
-    <ScrollView
-            android:layout_width="240dp"
-            android:layout_height="152dp"
-            android:id="@+id/scrollViewDb"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintTop_toBottomOf="@+id/searchResultsList"
-            android:layout_marginTop="36dp">
-
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/textViewDb"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-    </ScrollView>
-
-    <Button
-            android:text="Use location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonPermission"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/searchResultsList"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.436" />
+            app:layout_constraintTop_toBottomOf="@+id/searchView"
+            app:layout_constraintVertical_bias="0.0" />
+
+    <SearchView
+            android:layout_width="300dp"
+            android:layout_height="56dp"
+            android:id="@+id/searchView"
+            android:queryHint="Введите название города"
+            android:iconifiedByDefault="false"
+            android:background="#C8FDFDFD"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintTop_toBottomOf="@+id/selectedCityTv"
+            android:layout_marginTop="8dp"
+            android:queryBackground="@null" />
 
     <ProgressBar
             style="?android:attr/progressBarStyle"
@@ -64,11 +52,56 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/progressBar2"
-            app:layout_constraintHorizontal_bias="0.484"
-            app:layout_constraintTop_toBottomOf="@+id/scrollViewDb"
-            android:layout_marginTop="36dp"
-            android:visibility="invisible"
-            tools:visibility="invisible" />
+            app:layout_constraintHorizontal_bias="0.498"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/searchResultsList"
+            android:layout_marginTop="24dp" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+            android:text="Настройки"
+            android:layout_width="197dp"
+            android:layout_height="34dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            android:id="@+id/textViewSettingsInfo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:theme="@style/MenuItemMain" />
+
+    <TextView
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:id="@+id/textViewGpsStatus"
+            app:layout_constraintStart_toEndOf="@+id/imageButtonGps"
+            android:layout_marginStart="36dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageButtonGps"
+            android:text="Текущее местоположение"
+            app:layout_constraintTop_toTopOf="@+id/imageButtonGps" />
+
+    <ImageButton
+            android:layout_width="56dp"
+            android:layout_height="57dp"
+            app:srcCompat="@android:drawable/ic_menu_mylocation"
+            android:id="@+id/imageButtonGps"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.301"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+            app:layout_constraintVertical_bias="0.263" />
+
+    <TextView
+            android:background="@drawable/tv_rect_small_items"
+            android:layout_width="wrap_content"
+            android:layout_height="31dp"
+            android:id="@+id/selectedCityTv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:padding="7dp"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDivH2"
+            android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

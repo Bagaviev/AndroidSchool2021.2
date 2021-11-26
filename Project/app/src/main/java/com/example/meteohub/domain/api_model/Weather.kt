@@ -13,5 +13,4 @@ data class Weather (
     var description: String?,
 
     @SerializedName("icon")
-    var icon: String?) {
-}
+    var icon: String?)

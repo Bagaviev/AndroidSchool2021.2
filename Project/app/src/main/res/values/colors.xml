@@ -7,4 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="light_blue_appbars">#C195B1E1</color>
+    <color name="main_background">#B4DCDCDC</color>
+    <color name="cells_items">#D8FFFFFF</color>
+    <color name="main_rect">#EBFBFBE7</color>
+    <color name="ads">#569F60</color>
+    <color name="rounded_small_items">#C4D3D1F1</color>
+    <color name="bottom_grad">#BF5FE671</color>
+    <color name="top_grad">#BA748AC1</color>
+
+
 </resources>

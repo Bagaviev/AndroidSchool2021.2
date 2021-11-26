@@ -3,7 +3,6 @@ package com.example.meteohub.presentation.view
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -52,13 +51,11 @@ class ListActivity : AppCompatActivity() {
         if (savedInstanceState == null)
             listActivityViewModel.publishWeatherLiveData(savedCity!!.lat, savedCity!!.lon)
 
-        val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(getDrawable(R.drawable.own_vertical_divider)!!)
-        binding!!.recView.addItemDecoration(itemDecoration)
+        initRecycler()
     }
 
     override fun onStart() {
-        binding?.buttonLoad?.setOnClickListener { startSettings() }
+        binding?.buttonSettings?.setOnClickListener { startSettings() }
         super.onStart()
     }
 
@@ -98,6 +95,13 @@ class ListActivity : AppCompatActivity() {
                 startDetail(weather)
             }
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun initRecycler() {
+        val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)
+        itemDecoration.setDrawable(getDrawable(R.drawable.recycler_vertical_divider)!!)
+        binding!!.recView.addItemDecoration(itemDecoration)
     }
 
     private fun startDetail(weather: WeeklyWeather) {

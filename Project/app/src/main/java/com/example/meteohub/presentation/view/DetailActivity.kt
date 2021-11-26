@@ -21,14 +21,17 @@ class DetailActivity : AppCompatActivity() {
 
     private fun bindData(dayWeather: WeeklyWeather) {
         binding?.textViewDtDet?.text = dayWeather.dt
-        binding?.textViewDayTDet?.text = dayWeather.dayTemp
 
-        binding?.textViewNiTDet?.text = dayWeather.nightTemp
+        binding?.textViewDTempDet?.text = dayWeather.dayTemp
+        binding?.textViewNTempDet?.text = dayWeather.nightTemp
         binding?.textViewHumDet?.text = dayWeather.humidity
 
-        binding?.textViewPresDet?.text = dayWeather.pressure
-        binding?.textViewWinSpDet?.text = dayWeather.windSpeed
+        binding?.textViewPressDet?.text = dayWeather.pressure
+        binding?.textViewWindSDet?.text = dayWeather.windSpeed
+        binding?.textViewWDegreeDet?.text = dayWeather.windDeg
 
-        binding?.textViewDescDet?.text = dayWeather.description
+        binding?.textViewSriseDet?.text = dayWeather.sunrise
+        binding?.textViewSsetDet?.text = dayWeather.sunset
+        binding?.textViewDpointDet?.text = dayWeather.dewPoint
     }
 }

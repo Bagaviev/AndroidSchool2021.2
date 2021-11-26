@@ -31,6 +31,7 @@ class SettingsActivityViewModel
     private val mProgressLiveData = MutableLiveData<Boolean>()
 
     private val mAllCityLiveData = MutableLiveData<List<City>>()
+    private val mCityByCoordsLiveData = MutableLiveData<City>()
 
     private var appDb: AppDatabase? = applicationResLocator.getRoomInstance()
     var locationModule: LocationModule? = LocationModule(applicationResLocator)
@@ -61,8 +62,8 @@ class SettingsActivityViewModel
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-            .doOnError (mErrorLiveData::setValue)
-            .subscribe { item -> applicationResLocator.saveToPrefs(item!!) }
+            .doAfterSuccess { item -> applicationResLocator.saveToPrefs(item!!) }
+            .subscribe(mCityByCoordsLiveData::setValue, mErrorLiveData::setValue)
 
         mDisposable?.add(disposable)
     }
@@ -92,6 +93,10 @@ class SettingsActivityViewModel
             mDisposable = null
         }
         super.onCleared()
+    }
+
+    fun getCityByCoordsLiveData(): LiveData<City> {
+        return mCityByCoordsLiveData
     }
 
     fun getAllCitiesLiveData(): LiveData<List<City>> {

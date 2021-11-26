@@ -4,19 +4,36 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.view.ListActivity">
+        tools:context=".presentation.view.ListActivity"
+        android:background="@drawable/gradient_selector_bg">
+
+    <ImageButton
+            android:elevation="5dp"
+            android:layout_width="56dp"
+            android:layout_height="57dp"
+            android:src="@drawable/ic_baseline_settings_applications_24"
+            android:background="#003A87BC"
+            android:id="@+id/buttonSettings"
+            app:layout_constraintEnd_toEndOf="@+id/viewToday"
+            app:layout_constraintStart_toStartOf="@+id/viewToday"
+            app:layout_constraintHorizontal_bias="0.976"
+            app:layout_constraintBottom_toBottomOf="@+id/viewToday"
+            app:layout_constraintTop_toTopOf="@+id/viewToday"
+            app:layout_constraintVertical_bias="0.054" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="0dp"
-            android:layout_height="524dp"
+            android:layout_height="450dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:id="@+id/recView"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="100dp"
             app:layout_constraintBottom_toTopOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.865" />
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp" />
 
     <ProgressBar
             style="?android:attr/progressBarStyle"
@@ -28,27 +45,33 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-            android:text="Settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonLoad"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.894"
-            app:layout_constraintBottom_toTopOf="@+id/recView"
-            app:layout_constraintVertical_bias="0.437" />
-
     <TextView
             android:text="Ads"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            android:gravity="center" />
+            app:layout_constraintHorizontal_bias="0.0"
+            android:gravity="center"
+            android:background="@color/ads" />
+
+    <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/viewToday"
+            android:background="@drawable/main_rect"
+            android:elevation="3dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/recView"
+            app:layout_constraintHorizontal_bias="0.067"
+            app:layout_constraintVertical_bias="0.14"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

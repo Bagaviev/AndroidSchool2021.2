@@ -19,5 +19,4 @@ data class Temp (
     var eve: Double,
 
     @SerializedName("morn")
-    var morn: Double) {
-}
+    var morn: Double)

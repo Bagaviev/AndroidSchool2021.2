@@ -13,5 +13,4 @@ data class FeelsLike (
     var eve: Double,
 
     @SerializedName("morn")
-    var morn: Double) {
-}
+    var morn: Double)
