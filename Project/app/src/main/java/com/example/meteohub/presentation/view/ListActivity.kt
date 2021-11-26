@@ -90,7 +90,9 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun showData(weatherList: List<WeeklyWeather>) {
-        binding?.recView!!.adapter = WeatherListAdapter(weatherList, object: IClickListener {
+        setUpTableau(weatherList[0])
+
+        binding?.recView!!.adapter = WeatherListAdapter(weatherList.subList(1, weatherList.size - 1), object: IClickListener {
             override fun openItem(position: Int, weather: WeeklyWeather) {
                 startDetail(weather)
             }
@@ -113,5 +115,13 @@ class ListActivity : AppCompatActivity() {
     private fun startSettings() {
         var intent = Intent(applicationContext, SettingsActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun setUpTableau(todayData: WeeklyWeather) {
+        binding?.textViewCity?.text = savedCity?.cityName
+        binding?.textViewTodayDayT?.text = todayData.dayTemp
+        binding?.textViewTodayNightT?.text = todayData.nightTemp
+        binding?.textViewTodayWindS?.text = todayData.windSpeed
+        binding?.textViewTodayDesc?.text = todayData.description
     }
 }

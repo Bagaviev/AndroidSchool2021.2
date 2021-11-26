@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintTop_toBottomOf="@+id/selectedCityTv"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:queryBackground="@null" />
 
     <ProgressBar
@@ -55,7 +55,8 @@
             app:layout_constraintHorizontal_bias="0.498"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/searchResultsList"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:indeterminateTint="@color/white"/>
 
     <androidx.appcompat.widget.AppCompatTextView
             android:text="Настройки"
@@ -69,6 +70,7 @@
             android:theme="@style/MenuItemMain" />
 
     <TextView
+            android:textColor="@color/white"
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:id="@+id/textViewGpsStatus"
