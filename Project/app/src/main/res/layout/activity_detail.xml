@@ -19,6 +19,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:theme="@style/MenuItemMain" />
 
+    <ImageView
+            android:elevation="5dp"
+            android:layout_width="118dp"
+            android:layout_height="118dp"
+            android:src="@drawable/weather_sample_ic"
+            android:id="@+id/imageViewDetail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDtDet"
+            android:layout_marginTop="16dp" />
+
     <TextView
             android:textColor="@color/white"
             android:layout_width="wrap_content"
@@ -29,7 +41,7 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDivH"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:padding="2dp" />
 
     <TextView
@@ -51,9 +63,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/main_l"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDtDet"
             app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintVertical_bias="0.454">
+            app:layout_constraintTop_toBottomOf="@+id/imageViewDetail"
+            app:layout_constraintVertical_bias="0.13999999">
 
         <TableRow
                 android:layout_width="wrap_content"

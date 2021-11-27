@@ -1,6 +1,8 @@
 package com.example.meteohub.presentation.view
 
 import android.content.Intent
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -18,8 +20,14 @@ import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.presentation.view.adapter.IClickListener
 import com.example.meteohub.presentation.view.adapter.WeatherListAdapter
 import com.example.meteohub.presentation.viewmodel.ListActivityViewModel
+import com.example.meteohub.utils.Constants
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
@@ -90,7 +98,11 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun showData(weatherList: List<WeeklyWeather>) {
-        setUpTableau(weatherList[0])
+        setUpTableauData(weatherList[0])
+        handleDayNightTableau(weatherList[0])
+        initIcons(weatherList[0])
+
+        binding?.viewToday?.setOnClickListener { startDetail(weatherList[0]) }
 
         binding?.recView!!.adapter = WeatherListAdapter(weatherList.subList(1, weatherList.size - 1), object: IClickListener {
             override fun openItem(position: Int, weather: WeeklyWeather) {
@@ -117,11 +129,36 @@ class ListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setUpTableau(todayData: WeeklyWeather) {
+    private fun setUpTableauData(todayData: WeeklyWeather) {
         binding?.textViewCity?.text = savedCity?.cityName
         binding?.textViewTodayDayT?.text = todayData.dayTemp
         binding?.textViewTodayNightT?.text = todayData.nightTemp
         binding?.textViewTodayWindS?.text = todayData.windSpeed
         binding?.textViewTodayDesc?.text = todayData.description
+    }
+
+    private fun handleDayNightTableau(todayData: WeeklyWeather) {
+        val additionalDateFormat = SimpleDateFormat("HH:mm", Locale("ru"))
+        var now = additionalDateFormat.parse(additionalDateFormat.format(Date()))
+
+        if (now > todayData.sunriseRaw && now < todayData.sunsetRaw)
+            colorizeViewBackground(false)
+        else
+            colorizeViewBackground(true)
+    }
+
+    private fun colorizeViewBackground(isNight: Boolean) {
+        binding?.viewToday?.background?.colorFilter = when (isNight) {
+            true -> BlendModeColorFilter(resources.getColor(R.color.main_rect_night), BlendMode.SRC_ATOP)
+            false -> BlendModeColorFilter (resources.getColor(R.color.main_rect_day), BlendMode.SRC_ATOP)
+        }
+    }
+
+    private fun initIcons(todayData: WeeklyWeather) {
+        Picasso.get()
+            .load(Constants.BASE_ICON + todayData.icon + Constants.ICON_END)
+            .placeholder(R.drawable.weather_sample_ic)
+            .fit()
+            .into(binding?.imageViewToday)
     }
 }

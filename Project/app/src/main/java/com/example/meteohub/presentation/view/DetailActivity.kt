@@ -2,8 +2,11 @@ package com.example.meteohub.presentation.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.meteohub.R
 import com.example.meteohub.databinding.ActivityDetailBinding
 import com.example.meteohub.domain.our_model.WeeklyWeather
+import com.example.meteohub.utils.Constants
+import com.squareup.picasso.Picasso
 
 class DetailActivity : AppCompatActivity() {
     private var binding: ActivityDetailBinding? = null
@@ -33,5 +36,15 @@ class DetailActivity : AppCompatActivity() {
         binding?.textViewSriseDet?.text = dayWeather.sunrise
         binding?.textViewSsetDet?.text = dayWeather.sunset
         binding?.textViewDpointDet?.text = dayWeather.dewPoint
+
+        initIcons(dayWeather)
+    }
+
+    private fun initIcons(dayWeather: WeeklyWeather) {
+        Picasso.get()
+            .load(Constants.BASE_ICON + dayWeather.icon + Constants.ICON_END)
+            .placeholder(R.drawable.weather_sample_ic)
+            .fit()
+            .into(binding?.imageViewDetail)
     }
 }
