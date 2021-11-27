@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -149,8 +151,8 @@ class ListActivity : AppCompatActivity() {
 
     private fun colorizeViewBackground(isNight: Boolean) {
         binding?.viewToday?.background?.colorFilter = when (isNight) {
-            true -> BlendModeColorFilter(resources.getColor(R.color.main_rect_night), BlendMode.SRC_ATOP)
-            false -> BlendModeColorFilter (resources.getColor(R.color.main_rect_day), BlendMode.SRC_ATOP)
+            true -> BlendModeColorFilterCompat.createBlendModeColorFilterCompat(resources.getColor(R.color.main_rect_night), BlendModeCompat.SRC_ATOP)
+            false -> BlendModeColorFilterCompat.createBlendModeColorFilterCompat(resources.getColor(R.color.main_rect_day), BlendModeCompat.SRC_ATOP)
         }
     }
 
