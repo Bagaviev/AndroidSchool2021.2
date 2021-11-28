@@ -124,7 +124,6 @@
             android:elevation="5dp"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/weather_sample_ic"
             android:id="@+id/imageViewToday"
             app:layout_constraintEnd_toEndOf="@+id/viewToday"
             app:layout_constraintTop_toBottomOf="@+id/buttonSettings"

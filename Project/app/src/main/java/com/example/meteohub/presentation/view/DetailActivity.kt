@@ -1,12 +1,15 @@
 package com.example.meteohub.presentation.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.meteohub.R
 import com.example.meteohub.databinding.ActivityDetailBinding
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.utils.Constants
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
+
 
 class DetailActivity : AppCompatActivity() {
     private var binding: ActivityDetailBinding? = null
@@ -43,7 +46,6 @@ class DetailActivity : AppCompatActivity() {
     private fun initIcons(dayWeather: WeeklyWeather) {
         Picasso.get()
             .load(Constants.BASE_ICON + dayWeather.icon + Constants.ICON_END)
-            .placeholder(R.drawable.weather_sample_ic)
             .fit()
             .into(binding?.imageViewDetail)
     }

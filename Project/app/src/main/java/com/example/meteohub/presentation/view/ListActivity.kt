@@ -1,8 +1,6 @@
 package com.example.meteohub.presentation.view
 
 import android.content.Intent
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -10,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,11 +24,9 @@ import com.example.meteohub.presentation.viewmodel.ListActivityViewModel
 import com.example.meteohub.utils.Constants
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
@@ -45,6 +42,9 @@ class ListActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
+
         binding = ActivityListBinding.inflate(layoutInflater)
 
         val view = binding!!.root
@@ -159,7 +159,6 @@ class ListActivity : AppCompatActivity() {
     private fun initIcons(todayData: WeeklyWeather) {
         Picasso.get()
             .load(Constants.BASE_ICON + todayData.icon + Constants.ICON_END)
-            .placeholder(R.drawable.weather_sample_ic)
             .fit()
             .into(binding?.imageViewToday)
     }

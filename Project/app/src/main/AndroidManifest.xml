@@ -15,15 +15,18 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.MeteoHub">
 
-        <activity android:name=".presentation.view.SettingsActivity"
-                  android:parentActivityName=".presentation.view.ListActivity"
-                  android:screenOrientation="portrait">
-            <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".presentation.view.ListActivity" />
+        <activity
+                android:theme="@style/Splash"
+                android:name=".presentation.view.ListActivity">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
+                android:theme="@style/Theme.MeteoHub.YesActionBar"
                 android:name=".presentation.view.DetailActivity"
                 android:parentActivityName=".presentation.view.ListActivity"
                 android:screenOrientation="portrait">
@@ -33,14 +36,13 @@
         </activity>
 
         <activity
-                android:theme="@style/Theme.MeteoHub.NoActionBar"
-                android:name=".presentation.view.ListActivity"
+                android:theme="@style/Theme.MeteoHub.YesActionBar"
+                android:name=".presentation.view.SettingsActivity"
+                android:parentActivityName=".presentation.view.ListActivity"
                 android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".presentation.view.ListActivity" />
         </activity>
 
         <meta-data

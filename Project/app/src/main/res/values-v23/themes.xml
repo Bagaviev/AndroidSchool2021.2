@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.MeteoHub" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MeteoHub" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/light_blue_appbars</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,6 +13,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/top_grad</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="MenuItemMain">
@@ -64,8 +66,14 @@
         <item name="android:translationZ">3dp</item>
     </style>
 
-    <style name="Theme.MeteoHub.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Theme.MeteoHub.YesActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+    </style>
+
+    <style name="Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/weather_sample_ic</item>
+        <item name="postSplashScreenTheme">@style/Theme.MeteoHub</item>
     </style>
 </resources>
