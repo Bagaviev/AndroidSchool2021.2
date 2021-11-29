@@ -7,54 +7,68 @@
         tools:context=".presentation.view.ListActivity"
         android:background="@drawable/gradient_selector_bg">
 
-    <ImageButton
-            android:elevation="5dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_baseline_settings_applications_24"
-            android:background="#003A87BC"
-            android:id="@+id/buttonSettings"
-            app:layout_constraintEnd_toEndOf="@+id/viewToday"
-            app:layout_constraintTop_toTopOf="@+id/viewToday"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="0dp"
             android:layout_height="450dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:id="@+id/recView"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="100dp"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recView"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textView"
+                app:layout_constraintVertical_bias="1.0"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageButton
+                android:elevation="5dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_baseline_settings_applications_24"
+                android:background="#003A87BC"
+                android:id="@+id/buttonSettings"
+                app:layout_constraintEnd_toEndOf="@+id/viewToday"
+                app:layout_constraintTop_toTopOf="@+id/viewToday"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp" />
 
     <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/progressBar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:indeterminateTint="@color/white"/>
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/progressBar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:indeterminateTint="@color/white" />
 
-    <TextView
-            android:text="Ads"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/textView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:gravity="center"
-            android:background="@color/ads" />
+        <TextView
+                android:text="Ads"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/textView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:gravity="center"
+                android:background="@color/ads" />
 
     <View
             android:layout_width="0dp"
@@ -62,33 +76,31 @@
             android:id="@+id/viewToday"
             android:background="@drawable/main_rect"
             android:elevation="3dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/recView"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.0"
             android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/swipeRefresh" />
 
     <TextView
-            style="@style/main_squared_textviews"
-            android:id="@+id/textViewTodayDesc"
-            app:layout_constraintBottom_toBottomOf="@+id/viewToday"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTodayDayT"
-            android:textSize="12sp"
-            app:layout_constraintVertical_bias="0.56"
-            app:layout_constraintStart_toStartOf="@+id/textViewTodayDayT" />
+                style="@style/main_squared_textviews"
+                android:id="@+id/textViewTodayDesc"
+                app:layout_constraintBottom_toBottomOf="@+id/viewToday"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTodayDayT"
+                android:textSize="12sp"
+                app:layout_constraintVertical_bias="0.56"
+                app:layout_constraintStart_toStartOf="@+id/textViewTodayDayT" />
 
-    <TextView
-            style="@style/main_squared_textviews"
-            android:id="@+id/textViewTodayWindS"
-            app:layout_constraintBottom_toBottomOf="@+id/viewToday"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTodayDayT"
-            app:layout_constraintVertical_bias="0.56"
-            app:layout_constraintStart_toStartOf="@+id/textViewTodayNightT" />
+        <TextView
+                style="@style/main_squared_textviews"
+                android:id="@+id/textViewTodayWindS"
+                app:layout_constraintBottom_toBottomOf="@+id/viewToday"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTodayDayT"
+                app:layout_constraintVertical_bias="0.56"
+                app:layout_constraintStart_toStartOf="@+id/textViewTodayNightT" />
 
     <TextView
             style="@style/main_squared_textviews"
@@ -103,33 +115,34 @@
             android:textSize="20sp" />
 
     <TextView
-            style="@style/main_squared_textviews"
-            android:id="@+id/textViewTodayDayT"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCity"
-            app:layout_constraintStart_toStartOf="@+id/viewToday"
-            app:layout_constraintBottom_toBottomOf="@+id/viewToday"
-            app:layout_constraintVertical_bias="0.19"
-            android:layout_marginStart="16dp" />
+                style="@style/main_squared_textviews"
+                android:id="@+id/textViewTodayDayT"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCity"
+                app:layout_constraintStart_toStartOf="@+id/viewToday"
+                app:layout_constraintBottom_toBottomOf="@+id/viewToday"
+                app:layout_constraintVertical_bias="0.19"
+                android:layout_marginStart="16dp" />
 
-    <TextView
-            style="@style/main_squared_textviews"
-            android:id="@+id/textViewTodayNightT"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCity"
-            app:layout_constraintBottom_toBottomOf="@+id/viewToday"
-            app:layout_constraintVertical_bias="0.191"
-            app:layout_constraintStart_toEndOf="@+id/textViewTodayDayT"
-            android:layout_marginStart="24dp" />
+        <TextView
+                style="@style/main_squared_textviews"
+                android:id="@+id/textViewTodayNightT"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCity"
+                app:layout_constraintBottom_toBottomOf="@+id/viewToday"
+                app:layout_constraintVertical_bias="0.191"
+                app:layout_constraintStart_toEndOf="@+id/textViewTodayDayT"
+                android:layout_marginStart="24dp" />
 
-    <ImageView
-            android:elevation="5dp"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:id="@+id/imageViewToday"
-            app:layout_constraintEnd_toEndOf="@+id/viewToday"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSettings"
-            app:layout_constraintBottom_toBottomOf="@+id/viewToday"
-            app:layout_constraintVertical_bias="0.51"
-            app:layout_constraintStart_toEndOf="@+id/textViewTodayNightT"
-            app:layout_constraintHorizontal_bias="0.6" />
+        <ImageView
+                android:elevation="5dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:id="@+id/imageViewToday"
+                app:layout_constraintEnd_toEndOf="@+id/viewToday"
+                app:layout_constraintTop_toBottomOf="@+id/buttonSettings"
+                app:layout_constraintBottom_toBottomOf="@+id/viewToday"
+                app:layout_constraintVertical_bias="0.51"
+                app:layout_constraintStart_toEndOf="@+id/textViewTodayNightT"
+                app:layout_constraintHorizontal_bias="0.6" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

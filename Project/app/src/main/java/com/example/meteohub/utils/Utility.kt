@@ -1,11 +1,29 @@
 package com.example.meteohub.utils
 
+import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+
+
 /**
  * @author Bulat Bagaviev
  * @created 21.11.2021
  */
 
 class Utility {
+
+    fun provideAlertDialog(context: Context, message: String): AlertDialog {
+        return AlertDialog.Builder(context)
+            .setTitle("Внимание!")
+            .setMessage(message)
+            .setPositiveButton("Ок", null)
+            .create()
+    }
+
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!.isConnected
+    }
 /*
 // Как делал prepopulate для базы данных. После это все аккуратно полегло в assets/app.db
 

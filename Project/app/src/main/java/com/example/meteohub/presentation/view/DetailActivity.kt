@@ -7,7 +7,6 @@ import com.example.meteohub.R
 import com.example.meteohub.databinding.ActivityDetailBinding
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.utils.Constants
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.squareup.picasso.Picasso
 
 

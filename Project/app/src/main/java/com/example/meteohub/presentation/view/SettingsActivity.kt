@@ -20,7 +20,9 @@ import com.example.meteohub.di.ApplicationResLocator
 import com.example.meteohub.domain.IRepository
 import com.example.meteohub.domain.our_model.City
 import com.example.meteohub.presentation.viewmodel.SettingsActivityViewModel
+import com.example.meteohub.utils.Constants
 import com.example.meteohub.utils.Constants.Companion.GPS_PERMISSION_CODE
+import com.example.meteohub.utils.Utility
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,7 +31,12 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var settingsActivityViewModel: SettingsActivityViewModel
 
-    private var cityListMappingCache: HashMap<String, City> = hashMapOf()
+    private var cityListMappingCache: HashMap<String, City>? = hashMapOf()
+
+    private var savedCity: City? = null
+
+    private var utils: Utility? = Utility()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +55,8 @@ class SettingsActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onStart() {
+        handleSavedCity()
+
         binding?.imageButtonGps?.setOnClickListener { handleGps() }
 
         binding?.searchView?.setOnQueryTextFocusChangeListener { _, _ ->
@@ -58,19 +67,51 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        cityListMappingCache.clear()
+        savedCity = null
+        utils = null
+        cityListMappingCache?.clear()
+        cityListMappingCache = null
         super.onDestroy()
     }
 
+    private fun handleSavedCity() {
+        savedCity = settingsActivityViewModel.applicationResLocator.readFromPrefs()
+
+        if (savedCity!!.lat == 0.0) {
+            val dialog = utils?.provideAlertDialog(this, Constants.NO_CITY_SELECTED)
+            dialog?.show()
+        }
+    }
+
+    private fun handleNoGpsModule() {
+        val dialog = utils?.provideAlertDialog(this, Constants.NO_GPS_MODULE)
+        dialog?.show()
+    }
+
+    private fun handleDenyPermission() {
+        val dialog = utils?.provideAlertDialog(this, Constants.NO_PERMISSION)
+        dialog?.show()
+    }
+
+    private fun handleDenyPermissionRoughly() {
+        val dialog = utils?.provideAlertDialog(this, Constants.NO_PERMISSION_ROUGHLY)
+        dialog?.show()
+    }
+
+    private fun handleAtlanticOceanLocation() {
+        val dialog = utils?.provideAlertDialog(this, Constants.CITY_NOT_FOUND)
+        dialog?.show()
+    }
+
     private fun initSearchView() {
-        var adapter = ArrayAdapter(this, R.layout.simple_list_item_1, cityListMappingCache.keys.toList())
+        var adapter = ArrayAdapter(this, R.layout.simple_list_item_1, cityListMappingCache!!.keys.toList())
         binding?.searchResultsList?.adapter = adapter
 
         binding?.searchResultsList?.setOnItemClickListener { parent, _, position, _ ->
             var cityNameSelected = parent.getItemAtPosition(position) as String
 
-            settingsActivityViewModel.applicationResLocator.saveToPrefs(cityListMappingCache[cityNameSelected]!!)
-            showSelectedCity(cityListMappingCache[cityNameSelected]!!)
+            settingsActivityViewModel.applicationResLocator.saveToPrefs(cityListMappingCache!![cityNameSelected]!!)
+            showSelectedCity(cityListMappingCache!![cityNameSelected]!!)
 
             binding?.searchView?.clearFocus()
             binding?.searchResultsList!!.visibility = View.INVISIBLE
@@ -117,7 +158,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showError(error: Throwable) {
-        Snackbar.make(binding?.root!!, error.toString(), BaseTransientBottomBar.LENGTH_LONG).show();
+        if (error is NoSuchElementException)
+            handleAtlanticOceanLocation()
+        else
+            Snackbar.make(binding?.root!!, error.toString(), BaseTransientBottomBar.LENGTH_LONG).show();
     }
 
     private fun showProgress(isVisible: Boolean) {
@@ -136,7 +180,7 @@ class SettingsActivity : AppCompatActivity() {
             } else
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), GPS_PERMISSION_CODE)
         } else
-            Toast.makeText(this, "No GPS module", Toast.LENGTH_LONG).show()
+            handleNoGpsModule()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -154,9 +198,9 @@ class SettingsActivity : AppCompatActivity() {
                     } catch (e: SecurityException) { showError(e) }
                 }
                 else if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION))
-                    Toast.makeText(this, "We need that permission", Toast.LENGTH_LONG).show()
+                    handleDenyPermission()
                 else
-                    Toast.makeText(this, "Not working without permission", Toast.LENGTH_LONG).show()
+                    handleDenyPermissionRoughly()
             }
         }
     }

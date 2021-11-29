@@ -57,6 +57,10 @@ dependencies {
 
     implementation 'androidx.core:core-splashscreen:1.0.0-alpha01'
 
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // тут еще были Шиммеры, но в последствии профита от них не получил, убрал
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
