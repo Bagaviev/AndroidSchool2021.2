@@ -87,6 +87,6 @@ api.openweathermap.org/data/2.5/onecall?lat=55.727649&lon=37.536683&exclude=minu
 * Добавлен swipeRefreshLayout
     
 ### Скрины:
-<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/scr1.jpeg" align="left" height="500" width="250" ></a>
-<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/scr2.jpeg" align="left" height="500" width="250" ></a>
-<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/scr3.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/screen1.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/screen2.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/screen3.jpeg" align="left" height="500" width="250" ></a>

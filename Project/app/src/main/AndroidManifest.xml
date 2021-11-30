@@ -18,7 +18,8 @@
 
         <activity
                 android:theme="@style/Splash"
-                android:name=".presentation.view.ListActivity">
+                android:name=".presentation.view.ListActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
