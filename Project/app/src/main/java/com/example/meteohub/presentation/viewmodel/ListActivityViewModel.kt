@@ -3,17 +3,13 @@ package com.example.meteohub.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.meteohub.domain.IRepository
 import com.example.meteohub.data.converter.UsefulFieldsExtractor
-import com.example.meteohub.data.network.NetworkModule
 import com.example.meteohub.di.ApplicationResLocator
+import com.example.meteohub.domain.IRepository
 import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.utils.Constants.Companion.APP_ID
-import com.example.meteohub.utils.Constants.Companion.LAT
-import com.example.meteohub.utils.Constants.Companion.LON
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 

@@ -42,12 +42,13 @@ class UsefulFieldsExtractor {
                     val humidity = day.humidity
                     val windSpeed = day.windSpeed
                     val description = day.weather?.get(0)?.description?.lowercase()
-
                     val sunrise = additionalDateFormat.format(Date(day.sunrise.toLong() * 1000))
                     val sunset = additionalDateFormat.format(Date(day.sunset.toLong() * 1000))
                     val windDegree = day.windDeg
                     val dewPoint = day.dewPoint
-                    val descriptionId = day.weather?.get(0)?.id
+                    val sunriseRaw = additionalDateFormat.parse(additionalDateFormat.format(Date(day.sunrise.toLong() * 1000)))
+                    val sunsetRaw = additionalDateFormat.parse(additionalDateFormat.format(Date(day.sunset.toLong() * 1000)))
+                    var icon = day.weather?.get(0)?.icon
 
                     result.add(
                         WeeklyWeather(
@@ -62,7 +63,9 @@ class UsefulFieldsExtractor {
                             "Закат: $sunset",
                             "Направление ветра: " + String.format("%d", windDegree) + "°",
                             "Точка росы: " + String.format("%d", Math.round(dewPoint!!)) + "°C",
-                            String.format("%d", descriptionId)
+                            sunriseRaw,
+                            sunsetRaw,
+                            icon
                         )
                     )
                 }

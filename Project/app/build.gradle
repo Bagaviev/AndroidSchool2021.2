@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.meteohub"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -39,19 +39,35 @@ android {
 
 dependencies {
 
+    // Room
     implementation "androidx.room:room-runtime:2.2.0"
     implementation "androidx.room:room-rxjava2:2.2.0"
     kapt  "androidx.room:room-compiler:2.1.0"
 
+    // Dagger
     implementation 'com.google.dagger:dagger:2.40'
     kapt 'com.google.dagger:dagger-compiler:2.40'
 
+    // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
+    // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Splashscreen
+    implementation 'androidx.core:core-splashscreen:1.0.0-alpha01'
+
+    // SwipeRefreshLayout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // Facebook Shimmer
+    // тут еще были Шиммеры, но в последствии профита от них не получил, убрал
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'

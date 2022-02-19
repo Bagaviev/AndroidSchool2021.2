@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Lesson26</string>
+    <string name="notification_channel_name">MainChannel</string>
+    <string name="notification_channel_description">Main channel</string>
+    <string name="notification_text_title">Foreground service</string>
+    <string name="notification_text_description">Running in background…</string>
+    <string name="button_stop_service">Kill me pls</string>
+</resources>

@@ -1,6 +1,7 @@
 package com.example.meteohub.domain.our_model
 
 import java.io.Serializable
+import java.util.*
 
 /**
 
@@ -19,5 +20,7 @@ data class WeeklyWeather (
     var sunset: String?,
     var windDeg: String?,
     var dewPoint: String?,
-    var descriptionId: String?
+    var sunriseRaw: Date?,
+    var sunsetRaw: Date?,
+    var icon: String?
 ): Serializable

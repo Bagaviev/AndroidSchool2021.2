@@ -1,6 +1,9 @@
 # Метео.Hub
 
 ## Что есть:
+Ветка master - до дедлайна
+Ветка dev - после, с доп функционалом и документацией
+
 Приложение отображения погоды на основе: https://openweathermap.org/api/one-call-api
 Бесплатное API отдающее погодные данные по координатам. 
 
@@ -67,8 +70,23 @@ api.openweathermap.org/data/2.5/onecall?lat=55.727649&lon=37.536683&exclude=minu
 * sunset - время захода, в формате "HH:MM"
 * windDeg - направление ветра, в градусах
 * dewPoint - точка росы, в градусах
+
+### Dev фичи:
+* tableau clickable, раньше не было деталки за сегодня, только на неделю вперед
+* день/ночь главный экран, теперь цвет табло либо желтый либо голубой, в зависимости от дня/ночи
+* иконки по описанию погоды, теперь иконка на табло не статична, а дублирует текстовое описание по смыслу
+* Добавил простой splash-screen по модному. Были непонятные проблемы с темами, решились с болью. Понял, что скорыть загрузку экрана все равно так не выйдет.
+* Узнал, что такое шиммеры, и попробовал на загрузке иконок, однако из-за встроенной обработки в бекграунде Пикассо, управлять моментом выключения шиммера не удалось. Оставил загрузку Пикассо, без placeolder'a, так красивее.
+* Запилен диалог для:
+* * Первый запуск если город не выбран
+* * Что город не найден (типа дальше крупных нас. пунктов на ~70 км)
+* * Что нет интернета, с блокировкой дальнейших действий до его появления и возобновление загрузки после
+* * Все с permissions
+* * Что нет нет gps модуля
+
+* Добавлен swipeRefreshLayout
     
 ### Скрины:
-<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/scr1.jpeg" align="left" height="500" width="250" ></a>
-<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/scr2.jpeg" align="left" height="500" width="250" ></a>
-<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/master/Project/scr3.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/dev/Project/screen1.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/dev/Project/screen2.jpeg" align="left" height="500" width="250" ></a>
+<a href="url"><img src="https://github.com/Bagaviev/AndroidSchool2021.2/blob/dev/Project/screen3.jpeg" align="left" height="500" width="250" ></a>

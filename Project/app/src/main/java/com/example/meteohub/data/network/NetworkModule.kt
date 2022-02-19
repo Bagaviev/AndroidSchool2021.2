@@ -30,4 +30,8 @@ class NetworkModule: IOpenWeatherApi {
     override fun getWeather(lat: Double, lon: Double, app_id: String?): Single<RequestMain?>? {
         return provideRetrofitService().getWeather(lat, lon, app_id)
     }
+
+    fun loadIcons() {
+
+    }
 }

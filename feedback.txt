@@ -1,0 +1,28 @@
+Самый долгий собес - 2ч
+Вопросы от Java Object до Android Services.
+
+Больше и сложнее вопросов, чем в Яндексе. Не было coding задач, как и вопросов по Kotlin.
+Java вопросы:
+	Пару слов про проект
+	Приниципы ООП
+	Solid (верхнеуровнево ответил, без деталей), Kiss, Dry и еще что-то (не ответил, но как оказалось потом изи)
+	Методы Object (какие из них нативные)
+	Контракт Hashcode & equals
+	Паттерны проектирования (штук 6 вспомнил, 2 вида из 3)
+	Volatile
+	Collections
+	Где когда что юзать LinkedList, ArrayList
+	HashMap, hashSet под капотом
+	Чутка про деревья
+	Про агрегацию и композицию
+
+	Android
+	Activity (какой-то муторный вопрос про onPause, вроде ответил)
+	Fragments, lifecycle
+	Service (мало сказал, основные виды только)
+	Broadcast Receiver (мало сказал)
+	Content provider (мало сказал)
+	MVVM (MVP) все рассказал тут
+	Custom view
+	View lifecycle (порядок попутал, в целом описал)
+	

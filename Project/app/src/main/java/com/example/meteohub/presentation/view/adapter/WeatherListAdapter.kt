@@ -15,7 +15,7 @@ import com.example.meteohub.domain.our_model.WeeklyWeather
 
 class WeatherListAdapter(private val weatherList: List<WeeklyWeather>, private val listener: IClickListener) : RecyclerView.Adapter<WeatherViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
+    override fun onCreateViewHolder(parent:  ViewGroup, viewType: Int): WeatherViewHolder {
         return WeatherViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false))
     }
 

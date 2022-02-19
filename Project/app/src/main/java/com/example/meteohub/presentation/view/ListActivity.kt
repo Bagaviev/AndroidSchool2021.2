@@ -1,11 +1,18 @@
 package com.example.meteohub.presentation.view
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,8 +25,13 @@ import com.example.meteohub.domain.our_model.WeeklyWeather
 import com.example.meteohub.presentation.view.adapter.IClickListener
 import com.example.meteohub.presentation.view.adapter.WeatherListAdapter
 import com.example.meteohub.presentation.viewmodel.ListActivityViewModel
+import com.example.meteohub.utils.Constants
+import com.example.meteohub.utils.Utility
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ListActivity : AppCompatActivity() {
     private var binding: ActivityListBinding? = null
@@ -28,6 +40,8 @@ class ListActivity : AppCompatActivity() {
 
     private var savedCity: City? = null
 
+    private var utils: Utility? = Utility()
+
     companion object {
         var BUNDLE_SELECTED_DAY_KEY: String? = "BUNDLE_SELECTED_DAY_KEY"
     }
@@ -35,32 +49,37 @@ class ListActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen()
+
         binding = ActivityListBinding.inflate(layoutInflater)
 
         val view = binding!!.root
         setContentView(view)
 
-        createViewModel()
-        subscribeForLiveData()
-
-        savedCity = listActivityViewModel.applicationResLocator.readFromPrefs()
-
-        if (savedCity!!.lat == 0.0)
-            startSettings()
-
-        if (savedInstanceState == null)
-            listActivityViewModel.publishWeatherLiveData(savedCity!!.lat, savedCity!!.lon)
+        if (!utils?.isNetworkAvailable(this)!!) {
+            val dialog = utils?.provideAlertDialog(this, Constants.NO_NETWORK_CONNECTION)
+            setupDialog(this, utils!!, dialog!!)
+        } else {
+            createViewModel()
+            subscribeForLiveData()
+        }
 
         initRecycler()
     }
 
     override fun onStart() {
-        binding?.buttonSettings?.setOnClickListener { startSettings() }
         super.onStart()
+
+        if (utils?.isNetworkAvailable(this)!!) {
+            initSwipeRefresh()
+            makeRequest()
+        }
     }
 
     override fun onDestroy() {
         savedCity = null
+        utils = null
         super.onDestroy()
     }
 
@@ -80,6 +99,13 @@ class ListActivity : AppCompatActivity() {
         listActivityViewModel.getErrorLiveData().observe(this, this::showError)
     }
 
+    private fun makeRequest() {
+        handleSavedCity()
+        listActivityViewModel.publishWeatherLiveData(savedCity!!.lat, savedCity!!.lon)
+
+        binding?.buttonSettings?.setOnClickListener { startSettings() }
+    }
+
     private fun showError(error: Throwable) {
         Snackbar.make(binding?.root!!, error.toString(), BaseTransientBottomBar.LENGTH_LONG).show()
     }
@@ -90,20 +116,45 @@ class ListActivity : AppCompatActivity() {
     }
 
     private fun showData(weatherList: List<WeeklyWeather>) {
-        setUpTableau(weatherList[0])
+        setUpTableauData(weatherList[0])
+        handleDayNightTableau(weatherList[0])
+        initIcons(weatherList[0])
+
+        binding?.swipeRefresh?.isRefreshing = false
+        binding?.viewToday?.setOnClickListener { startDetail(weatherList[0]) }
 
         binding?.recView!!.adapter = WeatherListAdapter(weatherList.subList(1, weatherList.size - 1), object: IClickListener {
-            override fun openItem(position: Int, weather: WeeklyWeather) {
-                startDetail(weather)
-            }
+            override fun openItem(position: Int, weather: WeeklyWeather) { startDetail(weather) }
         })
+
+        binding?.recView!!.adapter?.notifyDataSetChanged()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun initRecycler() {
         val itemDecoration = DividerItemDecoration(binding!!.recView.context, DividerItemDecoration.VERTICAL)
         itemDecoration.setDrawable(getDrawable(R.drawable.recycler_vertical_divider)!!)
         binding!!.recView.addItemDecoration(itemDecoration)
+    }
+
+    private fun initSwipeRefresh() {
+        binding?.swipeRefresh?.setOnRefreshListener {
+            onRefresh()
+        }
+    }
+
+    private fun onRefresh() {
+        listActivityViewModel.publishWeatherLiveData(savedCity!!.lat, savedCity!!.lon)
+        Toast.makeText(this@ListActivity, "Данные обновлены", Toast.LENGTH_LONG).show()
+    }
+
+    private fun handleSavedCity() {
+        savedCity = listActivityViewModel.applicationResLocator.readFromPrefs()
+
+        if (savedCity!!.lat == 0.0) {
+            val dialog = utils?.provideAlertDialog(this, Constants.NO_CITY_SELECTED)
+            setupDialog(this, utils!!, dialog!!)
+            startSettings()
+        }
     }
 
     private fun startDetail(weather: WeeklyWeather) {
@@ -117,11 +168,53 @@ class ListActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun setUpTableau(todayData: WeeklyWeather) {
+    private fun setUpTableauData(todayData: WeeklyWeather) {
         binding?.textViewCity?.text = savedCity?.cityName
         binding?.textViewTodayDayT?.text = todayData.dayTemp
         binding?.textViewTodayNightT?.text = todayData.nightTemp
         binding?.textViewTodayWindS?.text = todayData.windSpeed
         binding?.textViewTodayDesc?.text = todayData.description
+    }
+
+    private fun handleDayNightTableau(todayData: WeeklyWeather) {
+        val additionalDateFormat = SimpleDateFormat("HH:mm", Locale("ru"))
+        var now = additionalDateFormat.parse(additionalDateFormat.format(Date()))
+
+        if (now > todayData.sunriseRaw && now < todayData.sunsetRaw)
+            colorizeViewBackground(false)
+        else
+            colorizeViewBackground(true)
+    }
+
+    private fun colorizeViewBackground(isNight: Boolean) {
+        binding?.viewToday?.background?.colorFilter = when (isNight) {
+            true -> BlendModeColorFilterCompat.createBlendModeColorFilterCompat(resources.getColor(R.color.main_rect_night), BlendModeCompat.SRC_ATOP)
+            false -> BlendModeColorFilterCompat.createBlendModeColorFilterCompat(resources.getColor(R.color.main_rect_day), BlendModeCompat.SRC_ATOP)
+        }
+    }
+
+    private fun initIcons(todayData: WeeklyWeather) {
+        Picasso.get()
+            .load(Constants.BASE_ICON + todayData.icon + Constants.ICON_END)
+            .fit()
+            .into(binding?.imageViewToday)
+    }
+
+    private fun setupDialog(context: Context, utils: Utility, dialog: AlertDialog) {
+        dialog.setOnShowListener {
+            var button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            dialog.setCancelable(false)
+            dialog.setCanceledOnTouchOutside(false)
+
+            button.setOnClickListener {
+                if (utils.isNetworkAvailable(context)) {
+                    createViewModel()
+                    subscribeForLiveData()
+                    makeRequest()
+                    dialog.dismiss()
+                }
+            }
+        }
+        dialog.show()
     }
 }
