@@ -14,6 +14,7 @@ Java вопросы:
 	Где когда что юзать LinkedList, ArrayList
 	HashMap, hashSet под капотом
 	Чутка про деревья
+	Про агрегацию и композицию
 
 	Android
 	Activity (какой-то муторный вопрос про onPause, вроде ответил)
