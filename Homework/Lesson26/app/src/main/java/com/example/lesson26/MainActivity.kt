@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
-        Log.d("TAG", "onStart() called")
+        Log.d("TAG", "onStart() called")  // test git after merge dev
         super.onStart()
 
         startButton.setOnClickListener { startOurService() }
