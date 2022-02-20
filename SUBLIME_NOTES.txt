@@ -1,0 +1,5 @@
+Sublime notes:
+
+Cmd ctrl стрелки как в студии перескок строк
+Cmd shift p строка поиска умная, не просто ctrl f
+Установил плагин на JSON pretty, хоткеи control+shift+j
