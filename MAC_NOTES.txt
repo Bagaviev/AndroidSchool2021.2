@@ -1,3 +1,16 @@
+Mac external keyboard
+
+Win мапится на cmd
+~[ ] мапится на ё
+
+
+Mac change workspaces
+
+^ стрелки
+Есть моники, есть пространства, на них есть приложения открытые
+Последние cmd tab, также фокус focus monitor мониторов можно переключать
+
+
 Создать файл в finder shortcut
 
 Нужна какая то ебка с apple script, automator, services
