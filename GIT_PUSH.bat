@@ -1,4 +1,5 @@
+chcp 65001
 git add .
-git commit -m "some usefull comment"
+git commit -m "Собесы 2023"
 git push origin master
 pause

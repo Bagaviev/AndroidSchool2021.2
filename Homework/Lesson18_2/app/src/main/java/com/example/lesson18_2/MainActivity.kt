@@ -10,6 +10,9 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.lesson18_2.net.ConnectorTypes
 import com.example.lesson18_2.net.NetworkRepository
+import com.example.lesson18_2.pojo.User
+import com.example.lesson18_2.pojo.User2
+import com.example.lesson18_2.pojo.User3
 import kotlinx.coroutines.*
 
 // Для httpUrlConnection руками соберем json
@@ -60,16 +63,54 @@ class MainActivity : AppCompatActivity() {
             networkRepository.currentConnector.doGet()
         }
 
+        var t = Any()
+
         withContext(Dispatchers.Main) {
             val result = user.await()                 // в общем это то, чего мне не хватало в Executors get()...
             textViewData.text = result.toString()     // кажется мы заменили механизм с очередью событий (коллбеки) на что-то другое асинхронное
         }
     }
 
-    private fun doPost() {                            // по старинке
+    fun doPost() {                            // по старинке
         Thread {                                      // обновляем запись о юзере, его описание и возвращаем новое
             var user = networkRepository.currentConnector.doPost()
             runOnUiThread { textViewData.text = user.toString() }
         }.start()
+
+        isChangingConfigurations
+        isFinishing
+        test2().str
+        test2("abc")
+        // test3("str").str = "32"
+        // test4()
     }
+
+    data class test2(val str: String = "ded") : User2(2,2,"5",true) {
+        fun getSmth(): String {
+            return str
+        }
+    }
+
+    class test22(str: String)
+
+    fun String.addSome(str: String): String {
+        return this + str
+    }
+
+    class test3(val str: String)
+    class test4(var str: String) {
+        var param: String = ""
+            get() = field + "de"
+            set(value) {
+                field = value + "2"
+            }
+    }
+
+    object Test1 {
+        fun getSmth() = "uwu"
+        val trf: MutableList<String> = mutableListOf("ed", "ed2")
+
+        val tmp = trf
+    }
+
 }
